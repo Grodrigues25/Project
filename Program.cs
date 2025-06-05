@@ -36,7 +36,7 @@ app.MapGet("/", () => "Hello world!");
 
 app.MapGet("/Users", (UserDbContext context) =>
 {
-    return context.User.ToList();
+    return context.user.ToList();
 });
 
 app.MapPost("/Users", (User user, UserDbContext context) =>
