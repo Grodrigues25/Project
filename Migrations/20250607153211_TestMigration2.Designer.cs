@@ -11,8 +11,8 @@ using Project.Services;
 namespace Project.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20250607150038_TestMigration")]
-    partial class TestMigration
+    [Migration("20250607153211_TestMigration2")]
+    partial class TestMigration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,9 @@ namespace Project.Migrations
                         .HasDefaultValue("user");
 
                     b.HasKey("UserId", "Email");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("user");
                 });

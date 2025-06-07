@@ -20,12 +20,18 @@ namespace Project.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "user")
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user", x => new { x.UserId, x.Email });
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_Email",
+                table: "user",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />

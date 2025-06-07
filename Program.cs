@@ -49,5 +49,10 @@ app.MapPost("/Users", (User user, UserDbContext context) =>
     context.SaveChanges();
 });
 
+//app.MapGet("/Authenticate", (User user, UserDbContext context) =>
+//{
+
+//});
+
 app.Run();
 

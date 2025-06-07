@@ -19,9 +19,10 @@ namespace Project.Services
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations
+
             modelBuilder.Entity<User>()
-                .Property(b => b.Role)
-                .HasDefaultValue("user");
+                .HasIndex(b => b.Email)
+                .IsUnique();
         }
         #endregion
     }
