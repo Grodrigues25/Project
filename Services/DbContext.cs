@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Models;
+using System.Reflection.Metadata;
 
 // https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-dotnet-entity-framework-core-quickstart?view=azuresql&tabs=dotnet-cli%2Cservice-connector%2Cportal
 
@@ -12,5 +13,16 @@ namespace Project.Services
         {
         }
         public DbSet<User> user { get; set; }
+
+        // https://learn.microsoft.com/en-us/ef/core/modeling/
+        #region Required
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations
+            modelBuilder.Entity<User>()
+                .Property(b => b.Role)
+                .HasDefaultValue("user");
+        }
+        #endregion
     }
 }

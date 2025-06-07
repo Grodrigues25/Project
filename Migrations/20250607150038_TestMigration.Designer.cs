@@ -11,8 +11,8 @@ using Project.Services;
 namespace Project.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20250605094903_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250607150038_TestMigration")]
+    partial class TestMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,10 @@ namespace Project.Migrations
             modelBuilder.Entity("Project.Models.User", b =>
                 {
                     b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
@@ -46,11 +49,13 @@ namespace Project.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("user");
 
                     b.HasKey("UserId", "Email");
 
-                    b.ToTable("User");
+                    b.ToTable("user");
                 });
 #pragma warning restore 612, 618
         }

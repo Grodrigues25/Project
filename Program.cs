@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 using Project.Models;
 using Project.Services;
+
+// Implement Service Principal for the application so the Application runs against the Azure SQL Database with the Service Principal credentials. JWT maybe?
 
 var builder = WebApplication.CreateBuilder();
 
@@ -41,6 +44,7 @@ app.MapGet("/Users", (UserDbContext context) =>
 
 app.MapPost("/Users", (User user, UserDbContext context) =>
 {
+    user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
     context.Add(user);
     context.SaveChanges();
 });
