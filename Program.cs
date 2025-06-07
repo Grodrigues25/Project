@@ -5,6 +5,7 @@ using Azure.Identity;
 using Microsoft.Extensions.Azure;
 using Project.Models;
 using Project.Services;
+using Project.Endpoints;
 
 // https://learn.microsoft.com/en-us/sql/connect/ado-net/sql/azure-active-directory-authentication?view=sql-server-ver17#using-service-principal-authentication
 // + Add SP as a Contributor in the SQL Server
@@ -39,24 +40,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapGet("/", () => "Hello world!");
-
-app.MapGet("/Users", (UserDbContext context) =>
-{
-    return context.user.ToList();
-});
-
-app.MapPost("/Users", (User user, UserDbContext context) =>
-{
-    user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
-    context.Add(user);
-    context.SaveChanges();
-});
-
-//app.MapGet("/Authenticate", (User user, UserDbContext context) =>
-//{
-
-//});
+app.RegisterUserEndpoints();
 
 app.Run();
 
