@@ -1,4 +1,6 @@
-﻿using Project.Models;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
+using Project.Models;
 using Project.Services;
 
 namespace Project.Endpoints
@@ -12,6 +14,13 @@ namespace Project.Endpoints
             app.MapGet("/Users", (UserDbContext context) =>
             {
                 return context.user.ToList();
+            });
+
+            app.MapGet("/Users/{UserId}", (UserDbContext context, int UserId) =>
+            {
+                var userList = context.user.ToList();
+                var specificUser = userList.FirstOrDefault(i => i.UserId == UserId);
+                return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {UserId} not found.");
             });
 
             app.MapPost("/Users", (User user, UserDbContext context) =>
