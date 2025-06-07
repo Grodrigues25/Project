@@ -30,10 +30,6 @@ namespace Project.Endpoints
                 context.SaveChanges();
             });
 
-            //app.MapGet("/Authenticate", (User user, UserDbContext context) =>
-            //{
-
-            //});
         }
 
     }

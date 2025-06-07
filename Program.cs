@@ -41,6 +41,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.RegisterUserEndpoints();
+app.RegisterProductEndpoints();
 
 app.Run();
 
