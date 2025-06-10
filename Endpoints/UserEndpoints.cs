@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project.Models;
 using Project.Services;
 
@@ -28,6 +29,13 @@ namespace Project.Endpoints
                 user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
                 context.Add(user);
                 context.SaveChanges();
+            });
+
+            app.MapDelete("/Users/{UserId}", (UserDbContext context, int UserId) =>
+            {
+                return context.user.Where(c => c.UserId == UserId).ExecuteDelete() > 0 ? Results.Ok($"User with ID {UserId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
+
+                //return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {ProductId} not found.");
             });
 
         }

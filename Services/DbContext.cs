@@ -8,7 +8,7 @@ namespace Project.Services
 {
     public class UserDbContext : DbContext
     {
-        public UserDbContext(DbContextOptions<UserDbContext> options)
+        public UserDbContext(DbContextOptions<UserDbContext> options) 
             : base(options)
         {
         }
