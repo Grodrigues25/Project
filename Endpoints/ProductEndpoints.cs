@@ -31,8 +31,7 @@ namespace Project.Endpoints
             app.MapDelete("/Product/{ProductId}", (UserDbContext context, int ProductId) =>
             {
                 return context.product.Where(c => c.ProductId == ProductId).ExecuteDelete() > 0 ? Results.Ok($"Product with ID {ProductId} was successfully deleted") : Results.NotFound("Product ID specific does not exist");
-
-                //return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {ProductId} not found.");
+ 
             });
         }
     }

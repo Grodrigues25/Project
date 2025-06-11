@@ -14,7 +14,7 @@ namespace Project.Endpoints
         {
             app.MapGet("/Users", (UserDbContext context) =>
             {
-                return context.user.ToList();
+                return Results.Ok(context.user.ToList());
             });
 
             app.MapGet("/Users/{UserId}", (UserDbContext context, int UserId) =>
@@ -29,13 +29,18 @@ namespace Project.Endpoints
                 user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
                 context.Add(user);
                 context.SaveChanges();
+                return Results.Created();
             });
+
+            //app.MapPut("/Users", (User user, UserDbContext context) =>
+            //{
+
+            //});
 
             app.MapDelete("/Users/{UserId}", (UserDbContext context, int UserId) =>
             {
                 return context.user.Where(c => c.UserId == UserId).ExecuteDelete() > 0 ? Results.Ok($"User with ID {UserId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
 
-                //return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {ProductId} not found.");
             });
 
         }
