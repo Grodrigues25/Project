@@ -9,28 +9,30 @@ namespace Project.Endpoints
     {
         public static void RegisterProductEndpoints(this WebApplication app)
         {
-            app.MapGet("/Product", (UserDbContext context) =>
+            app.MapGet("/Product", async (UserDbContext context) =>
             {
-                return context.product.ToList() == null ?  Results.NotFound("No products in existence") : Results.Ok(context.product.ToList());
+                var ProductList = await context.product.ToListAsync();
+                return ProductList == null ?  Results.NotFound("No products in existence") : Results.Ok(ProductList);
             });
 
-            app.MapGet("/Product/{ProductId}", (UserDbContext context, int ProductId) =>
+            app.MapGet("/Product/{ProductId}", async (UserDbContext context, int productId) =>
             {
-                var productList = context.product.ToList();
-                var specificProduct = productList.FirstOrDefault(p => p.ProductId == ProductId);
+                var productList = await context.product.ToListAsync();
+                var specificProduct = productList.FirstOrDefault(p => p.ProductId == productId);
 
-                return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {ProductId} not found.");
+                return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {productId} not found.");
             });
 
-            app.MapPost("/Product", (Product newProduct, UserDbContext context) =>
+            app.MapPost("/Product", async (Product newProduct, UserDbContext context) =>
             {
-                context.Add(newProduct);
-                context.SaveChanges();
+                await context.AddAsync(newProduct);
+                await context.SaveChangesAsync();
+                return Results.Created();
             });
 
-            app.MapDelete("/Product/{ProductId}", (UserDbContext context, int ProductId) =>
+            app.MapDelete("/Product/{ProductId}", async (UserDbContext context, int productId) =>
             {
-                return context.product.Where(c => c.ProductId == ProductId).ExecuteDelete() > 0 ? Results.Ok($"Product with ID {ProductId} was successfully deleted") : Results.NotFound("Product ID specific does not exist");
+                return await context.product.Where(c => c.ProductId == productId).ExecuteDeleteAsync() > 0 ? Results.Ok($"Product with ID {productId} was successfully deleted") : Results.NotFound("Product ID specific does not exist");
  
             });
         }
