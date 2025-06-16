@@ -12,16 +12,16 @@ namespace Project.Endpoints
     {
         public static void RegisterUserEndpoints(this WebApplication app)
         {
-            app.MapGet("/Users", (UserDbContext context) =>
+            app.MapGet("/Users", async (UserDbContext context) =>
             {
-                return Results.Ok(context.user.ToList());
+                return await context.user.ToListAsync() == null ? Results.NotFound("No users in existence") : Results.Ok(context.user.ToList());
             });
 
-            app.MapGet("/Users/{UserId}", async (UserDbContext context, int UserId) =>
+            app.MapGet("/Users/{UserId}", async (UserDbContext context, int userId) =>
             {
                 var userList = await context.user.ToListAsync();
-                var specificUser = userList.FirstOrDefault(i => i.UserId == UserId);
-                return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {UserId} not found.");
+                var specificUser = userList.FirstOrDefault(i => i.UserId == userId);
+                return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {userId} not found.");
             });
 
             app.MapPost("/Users", async (User user, UserDbContext context) =>
@@ -37,9 +37,9 @@ namespace Project.Endpoints
 
             //});
 
-            app.MapDelete("/Users/{UserId}", async (UserDbContext context, int UserId) =>
+            app.MapDelete("/Users/{UserId}", async (UserDbContext context, int userId) =>
             {          
-                return await context.user.Where(c => c.UserId == UserId).ExecuteDeleteAsync() > 0 ? Results.Ok($"User with ID {UserId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
+                return await context.user.Where(c => c.UserId == userId).ExecuteDeleteAsync() > 0 ? Results.Ok($"User with ID {userId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
             });
 
         }
