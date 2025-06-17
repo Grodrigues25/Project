@@ -17,24 +17,19 @@ namespace Project.Endpoints
         {
             app.MapGet("/Users", async (IRepository<User> userRepo) =>
             {
-                return await userRepo.GetAsync(); /*await context.user.ToListAsync() == null ? Results.NotFound("No users in existence") : Results.Ok(context.user.ToList());*/
+                return await userRepo.GetAsync(); 
             });
 
             app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
             {
                 return await userRepo.GetByIdAsync(userId);
-                //var userList = await context.user.ToListAsync();
-                //var specificUser = userList.FirstOrDefault(i => i.UserId == userId);
-                //return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {userId} not found.");
             });
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
             {
                 user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
                 return await userRepo.AddAsync(user);
-                //await context.AddAsync(user);
-                //await context.SaveChangesAsync();
-                //return Results.Created();
+
             });
 
             //app.MapPut("/Users", (User user, UserDbContext context) =>
@@ -46,8 +41,7 @@ namespace Project.Endpoints
             {
                 User user = await userRepo.GetByIdAsync(userId);
                 return await userRepo.DeleteAsync(user);
-                
-                //return await context.user.Where(c => c.UserId == userId).ExecuteDeleteAsync() > 0 ? Results.Ok($"User with ID {userId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
+
             });
 
         }
