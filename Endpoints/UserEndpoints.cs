@@ -28,12 +28,13 @@ namespace Project.Endpoints
                 //return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {userId} not found.");
             });
 
-            app.MapPost("/Users", async (User user, UserDbContext context) =>
+            app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
             {
                 user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
-                await context.AddAsync(user);
-                await context.SaveChangesAsync();
-                return Results.Created();
+                return await userRepo.AddAsync(user);
+                //await context.AddAsync(user);
+                //await context.SaveChangesAsync();
+                //return Results.Created();
             });
 
             //app.MapPut("/Users", (User user, UserDbContext context) =>

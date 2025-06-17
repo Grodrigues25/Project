@@ -5,6 +5,12 @@ namespace Project.Services.UserManagementService
 {
     public class Repository<TEntity>(UserDbContext dbContext) : IRepository<TEntity> where TEntity : class
     {
+        public async Task<int> AddAsync(TEntity entity)
+        {
+            await dbContext.AddAsync(entity);
+            return await dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAsync()
         {
             return await dbContext.Set<TEntity>().ToListAsync(); 
