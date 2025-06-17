@@ -11,6 +11,12 @@ namespace Project.Services.UserManagementService
             return await dbContext.SaveChangesAsync();
         }
 
+        public async Task<int> DeleteAsync(TEntity entity)
+        {
+            dbContext.Set<TEntity>().Remove(entity);
+            return await dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAsync()
         {
             return await dbContext.Set<TEntity>().ToListAsync(); 

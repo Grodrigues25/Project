@@ -9,5 +9,6 @@ namespace Project.Services.UserManagementService
         Task<IEnumerable<TEntity>> GetAsync();
         Task<TEntity> GetByIdAsync(int id);
         Task<int> AddAsync(TEntity entity);
+        Task<int> DeleteAsync(TEntity entity);
     }
 }

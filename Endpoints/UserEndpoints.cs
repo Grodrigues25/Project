@@ -42,9 +42,12 @@ namespace Project.Endpoints
 
             //});
 
-            app.MapDelete("/Users/{UserId}", async (UserDbContext context, int userId) =>
-            {          
-                return await context.user.Where(c => c.UserId == userId).ExecuteDeleteAsync() > 0 ? Results.Ok($"User with ID {userId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
+            app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
+            {
+                User user = await userRepo.GetByIdAsync(userId);
+                return await userRepo.DeleteAsync(user);
+                
+                //return await context.user.Where(c => c.UserId == userId).ExecuteDeleteAsync() > 0 ? Results.Ok($"User with ID {userId} was successfully deleted") : Results.NotFound("User ID specific does not exist");
             });
 
         }
