@@ -9,5 +9,10 @@ namespace Project.Services.UserManagementService
         {
             return await dbContext.Set<TEntity>().ToListAsync(); 
         }
+
+        public async Task<TEntity> GetByIdAsync(int id)
+        {
+            return await dbContext.Set<TEntity>().FindAsync(id);
+        }
     }
 }

@@ -20,11 +20,12 @@ namespace Project.Endpoints
                 return await userRepo.GetAsync(); /*await context.user.ToListAsync() == null ? Results.NotFound("No users in existence") : Results.Ok(context.user.ToList());*/
             });
 
-            app.MapGet("/Users/{UserId}", async (UserDbContext context, int userId) =>
+            app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
             {
-                var userList = await context.user.ToListAsync();
-                var specificUser = userList.FirstOrDefault(i => i.UserId == userId);
-                return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {userId} not found.");
+                return await userRepo.GetByIdAsync(userId);
+                //var userList = await context.user.ToListAsync();
+                //var specificUser = userList.FirstOrDefault(i => i.UserId == userId);
+                //return specificUser is not null ? Results.Ok(specificUser) : Results.NotFound($"Item with ID {userId} not found.");
             });
 
             app.MapPost("/Users", async (User user, UserDbContext context) =>

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project.Models
 {
-    [PrimaryKey(nameof(UserId), nameof(Email))]
+    [PrimaryKey(nameof(UserId))]
 
     public class User
     {
