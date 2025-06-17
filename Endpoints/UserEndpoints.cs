@@ -3,18 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.Models;
 using Project.Services;
+using Project.Services.UserManagementService;
 
 namespace Project.Endpoints
 {
-    //https://www.tessferrandez.com/blog/2023/10/31/organizing-minimal-apis.html
+    // https://www.tessferrandez.com/blog/2023/10/31/organizing-minimal-apis.html
+    // https://www.youtube.com/watch?v=Wiy54682d1w
 
     public static class UserEndpoints
     {
+
         public static void RegisterUserEndpoints(this WebApplication app)
         {
-            app.MapGet("/Users", async (UserDbContext context) =>
+            app.MapGet("/Users", async (IRepository<User> userRepo) =>
             {
-                return await context.user.ToListAsync() == null ? Results.NotFound("No users in existence") : Results.Ok(context.user.ToList());
+                return await userRepo.GetAsync(); /*await context.user.ToListAsync() == null ? Results.NotFound("No users in existence") : Results.Ok(context.user.ToList());*/
             });
 
             app.MapGet("/Users/{UserId}", async (UserDbContext context, int userId) =>

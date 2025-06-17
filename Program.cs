@@ -6,6 +6,7 @@ using Microsoft.Extensions.Azure;
 using Project.Models;
 using Project.Services;
 using Project.Endpoints;
+using Project.Services.UserManagementService;
 
 // https://learn.microsoft.com/en-us/sql/connect/ado-net/sql/azure-active-directory-authentication?view=sql-server-ver17#using-service-principal-authentication
 // + Add SP as a Contributor in the SQL Server
@@ -14,6 +15,7 @@ using Project.Endpoints;
 var builder = WebApplication.CreateBuilder();
 
 builder.Services.AddOpenApi();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())

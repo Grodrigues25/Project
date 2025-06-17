@@ -1,0 +1,13 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Project.Models;
+
+namespace Project.Services.UserManagementService
+{
+    public class Repository<TEntity>(UserDbContext dbContext) : IRepository<TEntity> where TEntity : class
+    {
+        public async Task<IEnumerable<TEntity>> GetAsync()
+        {
+            return await dbContext.Set<TEntity>().ToListAsync(); 
+        }
+    }
+}
