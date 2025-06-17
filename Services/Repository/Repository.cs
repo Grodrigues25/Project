@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Models;
+using Project.Services.Repository;
 
 namespace Project.Services.UserManagementService
 {

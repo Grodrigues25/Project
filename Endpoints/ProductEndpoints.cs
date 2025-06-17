@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Project.Models;
 using Project.Services;
-using Project.Services.UserManagementService;
+using Project.Services.Repository;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Project.Endpoints
 {
@@ -12,12 +13,19 @@ namespace Project.Endpoints
         {
             app.MapGet("/Product", async (IRepository<Product> productRepo) =>
             {
-                return await productRepo.GetAsync();
+                var productList = await productRepo.GetAsync();
+                return Results.Ok(productList);
             });
 
             app.MapGet("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId) =>
             {
-                return await productRepo.GetByIdAsync(productId);
+                if (productId < 0)
+                {
+                    return Results.BadRequest("Product ID need to be a positive integer");
+                }
+
+                var product = await productRepo.GetByIdAsync(productId);
+                return product != null ? Results.Ok(product) : Results.NotFound($"There is no product with ID {productId}.");                
             });
 
             app.MapPost("/Product", async (IRepository<Product> productRepo, Product newProduct) =>

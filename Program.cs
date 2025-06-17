@@ -7,6 +7,7 @@ using Project.Models;
 using Project.Services;
 using Project.Endpoints;
 using Project.Services.UserManagementService;
+using Project.Services.Repository;
 
 // https://learn.microsoft.com/en-us/sql/connect/ado-net/sql/azure-active-directory-authentication?view=sql-server-ver17#using-service-principal-authentication
 // + Add SP as a Contributor in the SQL Server

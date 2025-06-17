@@ -2,7 +2,7 @@
 
 //https://www.youtube.com/watch?v=EvD8BU9HHWc
 
-namespace Project.Services.UserManagementService
+namespace Project.Services.Repository
 {
     public interface IRepository<TEntity> where TEntity : class
     {

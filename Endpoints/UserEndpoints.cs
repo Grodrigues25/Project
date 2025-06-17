@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.Models;
 using Project.Services;
-using Project.Services.UserManagementService;
+using Project.Services.Repository;
 
 namespace Project.Endpoints
 {
