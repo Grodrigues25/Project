@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Project.Models;
 using Project.Services;
+using Project.Services.UserManagementService;
 
 namespace Project.Endpoints
 {
@@ -9,30 +10,35 @@ namespace Project.Endpoints
     {
         public static void RegisterProductEndpoints(this WebApplication app)
         {
-            app.MapGet("/Product", async (UserDbContext context) =>
+            app.MapGet("/Product", async (IRepository<Product> productRepo) =>
             {
-                var ProductList = await context.product.ToListAsync();
-                return ProductList == null ?  Results.NotFound("No products in existence") : Results.Ok(ProductList);
+                return await productRepo.GetAsync();
+                //var ProductList = await context.product.ToListAsync();
+                //return ProductList == null ?  Results.NotFound("No products in existence") : Results.Ok(ProductList);
             });
 
-            app.MapGet("/Product/{ProductId}", async (UserDbContext context, int productId) =>
+            app.MapGet("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId) =>
             {
-                var productList = await context.product.ToListAsync();
-                var specificProduct = productList.FirstOrDefault(p => p.ProductId == productId);
+                return await productRepo.GetByIdAsync(productId);
+                //var productList = await context.product.ToListAsync();
+                //var specificProduct = productList.FirstOrDefault(p => p.ProductId == productId);
 
-                return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {productId} not found.");
+                //return specificProduct is not null ? Results.Ok(specificProduct) : Results.NotFound($"Item with ID {productId} not found.");
             });
 
-            app.MapPost("/Product", async (Product newProduct, UserDbContext context) =>
+            app.MapPost("/Product", async (IRepository<Product> productRepo, Product newProduct) =>
             {
-                await context.AddAsync(newProduct);
-                await context.SaveChangesAsync();
-                return Results.Created();
+                return await productRepo.AddAsync(newProduct);
+                //await context.AddAsync(newProduct);
+                //await context.SaveChangesAsync();
+                //return Results.Created();
             });
 
-            app.MapDelete("/Product/{ProductId}", async (UserDbContext context, int productId) =>
+            app.MapDelete("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId) =>
             {
-                return await context.product.Where(c => c.ProductId == productId).ExecuteDeleteAsync() > 0 ? Results.Ok($"Product with ID {productId} was successfully deleted") : Results.NotFound("Product ID specific does not exist");
+                Product product = await productRepo.GetByIdAsync(productId);
+                return await productRepo.DeleteAsync(product);
+                //return await context.product.Where(c => c.ProductId == productId).ExecuteDeleteAsync() > 0 ? Results.Ok($"Product with ID {productId} was successfully deleted") : Results.NotFound("Product ID specific does not exist");
  
             });
         }
