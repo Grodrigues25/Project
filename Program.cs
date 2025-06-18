@@ -30,7 +30,16 @@ else
 }
 
 builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseSqlServer(connection));
+{
+    options.UseSqlServer(connection,
+    sqlServerOptionsAction: sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 10,
+        maxRetryDelay: TimeSpan.FromSeconds(30),
+        errorNumbersToAdd: null);
+    });
+});
 
 var app = builder.Build();
 
