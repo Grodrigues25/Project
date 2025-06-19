@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.Models;
-using Project.Services;
 using Project.Services.Repository;
 
 namespace Project.Endpoints
@@ -17,12 +16,18 @@ namespace Project.Endpoints
         {
             app.MapGet("/Users", async (IRepository<User> userRepo) =>
             {
-                return await userRepo.GetAsync(); 
+                var user = await userRepo.GetAsync();
+                return Results.Ok(user); 
             });
 
             app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
             {
-                return await userRepo.GetByIdAsync(userId);
+                if (userId < 0)
+                {
+                    return Results.BadRequest("User ID need to be a positive integer");
+                }
+                var user = await userRepo.GetByIdAsync(userId);
+                return user != null ? Results.Ok(user) : Results.NotFound($"There is no product with ID {userId}.");
             });
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>

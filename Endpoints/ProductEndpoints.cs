@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Project.Models;
-using Project.Services;
+﻿using Project.Models;
 using Project.Services.Repository;
-using System.Reflection.Metadata.Ecma335;
+
 
 namespace Project.Endpoints
 {
