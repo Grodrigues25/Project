@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder();
 
 builder.Services.AddOpenApi();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
@@ -69,6 +70,7 @@ var app = builder.Build();
 
 app.RegisterUserEndpoints();
 app.RegisterProductEndpoints();
+app.RegisterAuthenticationEndpoints();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,8 +1,8 @@
 ﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Project.Models;
 using Project.Services.Repository;
+using Project.Services;
 
 namespace Project.Endpoints
 {
@@ -32,7 +32,8 @@ namespace Project.Endpoints
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
             {
-                user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
+                var PasswordHasher = new PasswordHasher<User>();
+                user.Password = PasswordHasher.HashPassword(user, user.Password);
                 return await userRepo.AddAsync(user);
 
             });

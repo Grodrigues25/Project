@@ -1,14 +1,15 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Project.Models;
 using Project.Models.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 
 namespace Project.Services;
 
-public class AuthenticationService
+public class AuthenticationService : IAuthenticationService
 {
 
     private readonly UserDbContext _dbcontext;
@@ -27,10 +28,9 @@ public class AuthenticationService
             return null;
         }
 
-        request.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, 13);
-
-        var userAccount = await _dbcontext.user.FindAsync(request.Email);
-        if (userAccount == null || request.Password != userAccount.Password) {
+        var PasswordHasher = new PasswordHasher<LoginRequestModel>();
+        var userAccount = await _dbcontext.user.Where(u => u.Email == request.Email).FirstOrDefaultAsync();
+        if (userAccount == null || PasswordHasher.VerifyHashedPassword(request, userAccount.Password, request.Password)== PasswordVerificationResult.Failed) {
             return null;
         }
 

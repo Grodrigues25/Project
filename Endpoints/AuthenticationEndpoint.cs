@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-using Project.Services;
+﻿using Project.Services;
 using Project.Models.Authentication;
 
 namespace Project.Endpoints
@@ -8,8 +7,8 @@ namespace Project.Endpoints
     {
         public static void RegisterAuthenticationEndpoints(this WebApplication app)
         {
-            // Make this Authentication method in Repository Pattern style and see if it resolves the error message.
-            app.MapPost("/auth/login", async (AuthenticationService authService, LoginRequestModel request) =>
+            // TODO: Make this Authentication method in Repository Pattern style and see if it resolves the error message, aka create Interface and then use interface in the endpoint.
+            app.MapPost("/auth/login", async (IAuthenticationService authService, LoginRequestModel request) =>
             {
                 var result = await authService.Authenticate(request);
                 if (result == null)
@@ -17,7 +16,7 @@ namespace Project.Endpoints
                     return Results.Unauthorized();
                 }
 
-                return result;
+                return Results.Ok(result);
             });
         }
     }
