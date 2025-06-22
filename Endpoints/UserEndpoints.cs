@@ -18,7 +18,7 @@ namespace Project.Endpoints
             {
                 var user = await userRepo.GetAsync();
                 return Results.Ok(user); 
-            });
+            }).RequireAuthorization("adminAccess");
 
             app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
             {
@@ -28,7 +28,7 @@ namespace Project.Endpoints
                 }
                 var user = await userRepo.GetByIdAsync(userId);
                 return user != null ? Results.Ok(user) : Results.NotFound($"There is no product with ID {userId}.");
-            });
+            }).RequireAuthorization("adminAccess");
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
             {
