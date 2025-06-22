@@ -48,7 +48,7 @@ namespace Project.Endpoints
                 User user = await userRepo.GetByIdAsync(userId);
                 return await userRepo.DeleteAsync(user);
 
-            });
+            }).RequireAuthorization("adminAccess");
 
         }
 

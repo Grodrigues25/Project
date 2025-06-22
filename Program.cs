@@ -41,7 +41,6 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 });
 
 // https://www.youtube.com/watch?v=w8I32UPEvj8
-// https://www.youtube.com/watch?v=mgeuh8k3I4g
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,6 +64,11 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorizationBuilder()
+  .AddPolicy("adminAccess", policy =>
+        policy
+            .RequireRole("admin"));
 
 var app = builder.Build();
 

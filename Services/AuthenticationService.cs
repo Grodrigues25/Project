@@ -54,7 +54,6 @@ public class AuthenticationService : IAuthenticationService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-
             Expires = tokenExpiryTimeStamp,
             Issuer = issuer,
             Audience = audience,
