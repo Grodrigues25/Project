@@ -34,18 +34,26 @@ public class AuthenticationService : IAuthenticationService
             return null;
         }
 
+        if (userAccount.IsAdmin)
+        {
+            var role = "admin";
+        }
+
         var issuer = _configuration["JwtConfig:Issuer"];
         var audience = _configuration["JwtConfig:Audience"];
         var key = _configuration["JwtConfig:Key"];
         var tokenValidityMins = _configuration.GetValue<int>("JwtConfig:TokenValidityMins");
         var tokenExpiryTimeStamp = DateTime.UtcNow.AddMinutes(tokenValidityMins);
 
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Name, request.Email),
+            new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "admin" : "user")
+        };
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Name, request.Email)
-            }),
+            Subject = new ClaimsIdentity(claims),
 
             Expires = tokenExpiryTimeStamp,
             Issuer = issuer,
