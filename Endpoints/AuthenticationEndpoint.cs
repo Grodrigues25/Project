@@ -1,5 +1,6 @@
 ﻿using Project.Services;
 using Project.Models.Authentication;
+using Project.Services.Repository;
 
 namespace Project.Endpoints
 {
@@ -16,6 +17,16 @@ namespace Project.Endpoints
                 }
 
                 return Results.Ok(result);
+            });
+
+            app.MapPost("/auth/logout", async (IAuthenticationService authService, IRepository<BlacklistModel> blacklistRepo, BlacklistModel token) =>
+            {
+                var result = await authService.LogOut(blacklistRepo, token);
+                if (!result)
+                {
+                    return Results.BadRequest("Logout failed.");
+                }
+                return Results.Ok("Logged out successfully.");
             });
         }
     }

@@ -6,6 +6,7 @@ using Project.Models.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Project.Services.Repository;
 
 namespace Project.Services;
 
@@ -71,5 +72,19 @@ public class AuthenticationService : IAuthenticationService
             ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds
         };
 
+    }
+
+    public async Task<bool> LogOut(IRepository<BlacklistModel> blacklistRepo, BlacklistModel token)
+    {
+        try
+        {
+            await blacklistRepo.AddAsync(token);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (ex) as needed
+            return false;
+        }
     }
 }
