@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Project.Models;
 using Project.Models.Authentication;
+using Project.Services.Repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Project.Services.Repository;
 
 namespace Project.Services;
 
@@ -33,11 +32,6 @@ public class AuthenticationService : IAuthenticationService
         var userAccount = await _dbcontext.user.Where(u => u.Email == request.Email).FirstOrDefaultAsync();
         if (userAccount == null || PasswordHasher.VerifyHashedPassword(request, userAccount.Password, request.Password)== PasswordVerificationResult.Failed) {
             return null;
-        }
-
-        if (userAccount.IsAdmin)
-        {
-            var role = "admin";
         }
 
         var issuer = _configuration["JwtConfig:Issuer"];
@@ -86,5 +80,20 @@ public class AuthenticationService : IAuthenticationService
             // Log the exception (ex) as needed
             return false;
         }
+    }
+
+    public async Task<bool> ValidateJwtToken(HttpRequest request)
+    {
+        var requestHeaders = request.Headers["Authorization"].ToString();
+        var tokenHeadersSplit = requestHeaders.Split(' ');
+        var token = tokenHeadersSplit.Length > 1 ? tokenHeadersSplit[1] : string.Empty;
+
+        var tokenBlacklisted = await _dbcontext.blacklist.Where(u => u.Token == token).FirstOrDefaultAsync();
+        
+        if (tokenBlacklisted != null)
+        {
+            return false; // Token is blacklisted
+        }
+        return true; // Token is not blacklisted
     }
 }

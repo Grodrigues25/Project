@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Project.Models;
-using Project.Models.Authentication;
+﻿using Project.Models.Authentication;
 using Project.Services.Repository;
 
 namespace Project.Services
@@ -9,5 +7,6 @@ namespace Project.Services
     {
         Task<LoginResponseModel> Authenticate(LoginRequestModel request);
         Task<bool> LogOut(IRepository<BlacklistModel> blacklistRepo, BlacklistModel token);
+        Task<bool> ValidateJwtToken(HttpRequest request);
     }
 }

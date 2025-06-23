@@ -14,14 +14,21 @@ namespace Project.Endpoints
 
         public static void RegisterUserEndpoints(this WebApplication app)
         {
-            app.MapGet("/Users", async (IRepository<User> userRepo) =>
+            app.MapGet("/Users", async (IRepository<User> userRepo, IAuthenticationService auth, HttpRequest request) =>
             {
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
                 var user = await userRepo.GetAsync();
-                return Results.Ok(user); 
+                return Results.Ok(user);
+
             }).RequireAuthorization("adminAccess");
 
-            app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
+            app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
                 if (userId < 0)
                 {
                     return Results.BadRequest("User ID need to be a positive integer");
@@ -34,7 +41,9 @@ namespace Project.Endpoints
             {
                 var PasswordHasher = new PasswordHasher<User>();
                 user.Password = PasswordHasher.HashPassword(user, user.Password);
-                return await userRepo.AddAsync(user);
+                await userRepo.AddAsync(user);
+
+                return Results.Created($"/Users/{user.UserId}", user);
 
             });
 
@@ -43,10 +52,15 @@ namespace Project.Endpoints
 
             //});
 
-            app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
+            app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
+
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
                 User user = await userRepo.GetByIdAsync(userId);
-                return await userRepo.DeleteAsync(user);
+                await userRepo.DeleteAsync(user);
+                return Results.NoContent();
 
             }).RequireAuthorization("adminAccess");
 
