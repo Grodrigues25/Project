@@ -1,9 +1,8 @@
 ﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Project.Models;
-using Project.Services;
 using Project.Services.Repository;
+using Project.Services;
 
 namespace Project.Endpoints
 {
@@ -15,20 +14,36 @@ namespace Project.Endpoints
 
         public static void RegisterUserEndpoints(this WebApplication app)
         {
-            app.MapGet("/Users", async (IRepository<User> userRepo) =>
+            app.MapGet("/Users", async (IRepository<User> userRepo, IAuthenticationService auth, HttpRequest request) =>
             {
-                return await userRepo.GetAsync(); 
-            });
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
 
-            app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
+                var user = await userRepo.GetAsync();
+                return Results.Ok(user);
+
+            }).RequireAuthorization("adminAccess");
+
+            app.MapGet("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
-                return await userRepo.GetByIdAsync(userId);
-            });
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
+                if (userId < 0)
+                {
+                    return Results.BadRequest("User ID need to be a positive integer");
+                }
+                var user = await userRepo.GetByIdAsync(userId);
+                return user != null ? Results.Ok(user) : Results.NotFound($"There is no product with ID {userId}.");
+            }).RequireAuthorization("adminAccess");
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
             {
-                user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, 13);
-                return await userRepo.AddAsync(user);
+                var PasswordHasher = new PasswordHasher<User>();
+                user.Password = PasswordHasher.HashPassword(user, user.Password);
+                await userRepo.AddAsync(user);
+
+                return Results.Created($"/Users/{user.UserId}", user);
 
             });
 
@@ -37,12 +52,17 @@ namespace Project.Endpoints
 
             //});
 
-            app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId) =>
+            app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
-                User user = await userRepo.GetByIdAsync(userId);
-                return await userRepo.DeleteAsync(user);
 
-            });
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
+                User user = await userRepo.GetByIdAsync(userId);
+                await userRepo.DeleteAsync(user);
+                return Results.NoContent();
+
+            }).RequireAuthorization("adminAccess");
 
         }
 

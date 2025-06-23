@@ -1,13 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
-using Azure.Identity;
-using Microsoft.Extensions.Azure;
-using Project.Models;
 using Project.Services;
 using Project.Endpoints;
 using Project.Services.UserManagementService;
 using Project.Services.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 // https://learn.microsoft.com/en-us/sql/connect/ado-net/sql/azure-active-directory-authentication?view=sql-server-ver17#using-service-principal-authentication
 // + Add SP as a Contributor in the SQL Server
@@ -17,6 +15,7 @@ var builder = WebApplication.CreateBuilder();
 
 builder.Services.AddOpenApi();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
@@ -41,10 +40,44 @@ builder.Services.AddDbContext<UserDbContext>(options =>
     });
 });
 
+// https://www.youtube.com/watch?v=w8I32UPEvj8
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}
+).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+        ValidAudience = builder.Configuration["JwtConfig:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"]!)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorizationBuilder()
+  .AddPolicy("adminAccess", policy =>
+        policy
+            .RequireRole("admin"));
+
 var app = builder.Build();
 
 app.RegisterUserEndpoints();
 app.RegisterProductEndpoints();
+app.RegisterAuthenticationEndpoints();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
 

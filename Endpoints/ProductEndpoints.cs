@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Project.Models;
-using Project.Services;
+﻿using Project.Models;
 using Project.Services.Repository;
-using System.Reflection.Metadata.Ecma335;
+using Project.Services;
+
 
 namespace Project.Endpoints
 {
@@ -28,16 +26,28 @@ namespace Project.Endpoints
                 return product != null ? Results.Ok(product) : Results.NotFound($"There is no product with ID {productId}.");                
             });
 
-            app.MapPost("/Product", async (IRepository<Product> productRepo, Product newProduct) =>
+            app.MapPost("/Product", async (IRepository<Product> productRepo, Product newProduct, IAuthenticationService auth, HttpRequest request) =>
             {
-                return await productRepo.AddAsync(newProduct);
-            });
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
 
-            app.MapDelete("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId) =>
+                await productRepo.AddAsync(newProduct);
+
+                return Results.Created($"/Product/{newProduct.ProductId}", newProduct);
+
+            }).RequireAuthorization("adminAccess");
+
+            app.MapDelete("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId, IAuthenticationService auth, HttpRequest request) =>
             {
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
                 Product product = await productRepo.GetByIdAsync(productId);
-                return await productRepo.DeleteAsync(product); 
-            });
+                await productRepo.DeleteAsync(product);
+                
+                return Results.NoContent();
+
+            }).RequireAuthorization("adminAccess");
         }
     }
 }
