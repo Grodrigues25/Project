@@ -37,6 +37,26 @@ namespace Project.Endpoints
 
             }).RequireAuthorization("adminAccess");
 
+            app.MapPut("/Product/{ProductId}", async (IRepository<Product> productRepo, Product updatedProduct, int productId, IAuthenticationService auth, HttpRequest request) =>
+            {
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
+                if (productId < 0)
+                {
+                    return Results.BadRequest("Product ID need to be a positive integer");
+                }
+                if (updatedProduct.ProductId != productId)
+                {
+                    return Results.BadRequest("Product ID in the body does not match the Product ID in the URL.");
+                }
+                await productRepo.UpdateAsync(updatedProduct);
+                
+                return Results.NoContent();
+
+            }).RequireAuthorization("adminAccess");
+
+
             app.MapDelete("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId, IAuthenticationService auth, HttpRequest request) =>
             {
                 bool tokenIsValid = await auth.ValidateJwtToken(request);

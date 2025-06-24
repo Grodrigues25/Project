@@ -8,5 +8,6 @@ namespace Project.Services.Repository
         Task<TEntity> GetByIdAsync(int id);
         Task<int> AddAsync(TEntity entity);
         Task<int> DeleteAsync(TEntity entity);
+        Task<int> UpdateAsync(TEntity entity);
     }
 }
