@@ -26,5 +26,12 @@ namespace Project.Services.UserManagementService
         {
             return await dbContext.Set<TEntity>().FindAsync(id);
         }
+
+        public async Task<int> UpdateAsync(TEntity entity)
+        {
+
+            dbContext.Set<TEntity>().Update(entity);
+            return await dbContext.SaveChangesAsync();
+        }
     }
 }

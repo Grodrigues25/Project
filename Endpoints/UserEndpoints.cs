@@ -1,8 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Project.Models;
 using Project.Services.Repository;
 using Project.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Project.Endpoints
 {
@@ -35,6 +35,7 @@ namespace Project.Endpoints
                 }
                 var user = await userRepo.GetByIdAsync(userId);
                 return user != null ? Results.Ok(user) : Results.NotFound($"There is no product with ID {userId}.");
+
             }).RequireAuthorization("adminAccess");
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
@@ -47,10 +48,31 @@ namespace Project.Endpoints
 
             });
 
-            //app.MapPut("/Users", (User user, UserDbContext context) =>
-            //{
+            app.MapPut("/Users/{UserId}", async (User user, int userId, IAuthenticationService auth, IRepository<User> userRepo) =>
+            {
+                if (userId < 0)
+                {
+                    return Results.BadRequest("User ID need to be a positive integer");
+                }
+                if (user.UserId != userId)
+                {
+                    return Results.BadRequest("User ID in the body does not match the User ID in the URL.");
+                }
 
-            //});
+                var PasswordHasher = new PasswordHasher<User>();
+                user.Password = PasswordHasher.HashPassword(user, user.Password);
+
+                int resultCode = await userRepo.UpdateAsync(user);
+                if (resultCode > 0)
+                {
+                    return Results.NoContent();
+                }
+                else
+                {
+                    return Results.NotFound($"There is no user with ID {userId}.");
+                }
+
+            });
 
             app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
