@@ -15,6 +15,8 @@ namespace Project.Services
         public DbSet<User> user { get; set; }
         public DbSet<Product> product { get; set; }
         public DbSet<BlacklistModel> blacklist { get; set; }
+        public DbSet<Order> order { get; set; }
+        //public DbSet<OrderItems> orderItems { get; set; }
 
         // https://learn.microsoft.com/en-us/ef/core/modeling/
         #region Required
@@ -25,7 +27,13 @@ namespace Project.Services
             modelBuilder.Entity<User>()
                 .HasIndex(b => b.Email)
                 .IsUnique();
-        }
+
+            modelBuilder.Entity<User>()
+                .HasMany<Order>()
+                .WithOne()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired();
+        }  
         #endregion
     }
 }

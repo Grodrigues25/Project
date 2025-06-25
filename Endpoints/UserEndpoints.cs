@@ -2,7 +2,6 @@
 using Project.Models;
 using Project.Services.Repository;
 using Project.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace Project.Endpoints
 {
@@ -72,13 +71,18 @@ namespace Project.Endpoints
                     return Results.NotFound($"There is no user with ID {userId}.");
                 }
 
-            });
+            }).RequireAuthorization("userAccess", "adminAccess");
 
             app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
 
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
+
+                if (userId < 0)
+                {
+                    return Results.BadRequest("User ID need to be a positive integer");
+                }
 
                 User user = await userRepo.GetByIdAsync(userId);
                 await userRepo.DeleteAsync(user);

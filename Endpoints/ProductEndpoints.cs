@@ -15,6 +15,7 @@ namespace Project.Endpoints
                 return Results.Ok(productList);
             });
 
+            
             app.MapGet("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId) =>
             {
                 if (productId < 0)
@@ -26,6 +27,7 @@ namespace Project.Endpoints
                 return product != null ? Results.Ok(product) : Results.NotFound($"There is no product with ID {productId}.");                
             });
 
+
             app.MapPost("/Product", async (IRepository<Product> productRepo, Product newProduct, IAuthenticationService auth, HttpRequest request) =>
             {
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
@@ -34,8 +36,8 @@ namespace Project.Endpoints
                 await productRepo.AddAsync(newProduct);
 
                 return Results.Created($"/Product/{newProduct.ProductId}", newProduct);
-
             }).RequireAuthorization("adminAccess");
+
 
             app.MapPut("/Product/{ProductId}", async (IRepository<Product> productRepo, Product updatedProduct, int productId, IAuthenticationService auth, HttpRequest request) =>
             {
@@ -53,7 +55,6 @@ namespace Project.Endpoints
                 await productRepo.UpdateAsync(updatedProduct);
                 
                 return Results.NoContent();
-
             }).RequireAuthorization("adminAccess");
 
 
@@ -66,7 +67,6 @@ namespace Project.Endpoints
                 await productRepo.DeleteAsync(product);
                 
                 return Results.NoContent();
-
             }).RequireAuthorization("adminAccess");
         }
     }
