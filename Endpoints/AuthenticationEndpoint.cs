@@ -27,7 +27,7 @@ namespace Project.Endpoints
                     return Results.BadRequest("Logout failed.");
                 }
                 return Results.Ok("Logged out successfully.");
-            });
+            }).RequireAuthorization("userAccess", "adminAccess");
         }
     }
 }

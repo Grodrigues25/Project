@@ -70,11 +70,17 @@ builder.Services.AddAuthorizationBuilder()
         policy
             .RequireRole("admin"));
 
+builder.Services.AddAuthorizationBuilder()
+  .AddPolicy("userAccess", policy =>
+        policy
+            .RequireRole("user"));
+
 var app = builder.Build();
 
 app.RegisterUserEndpoints();
 app.RegisterProductEndpoints();
 app.RegisterAuthenticationEndpoints();
+app.RegisterOrderEndpoints();
 
 app.UseAuthentication();
 app.UseAuthorization();
