@@ -17,10 +17,8 @@ namespace Project.Endpoints
 
             app.MapGet("/Order/{OrderId}", async (IRepository<Order> orderRepo, int orderId) =>
             {
-                if (orderId < 0)
-                {
-                    return Results.BadRequest("Order ID needs to be a positive integer");
-                }
+                if (orderId < 0) return Results.BadRequest("Order ID needs to be a positive integer");
+
                 var order = await orderRepo.GetByIdAsync(orderId);
                 return order != null ? Results.Ok(order) : Results.NotFound($"There is no order with ID {orderId}.");
             }).RequireAuthorization("adminAccess");
@@ -37,15 +35,8 @@ namespace Project.Endpoints
             {
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
-
-                if (orderId < 0)
-                {
-                    return Results.BadRequest("Order ID needs to be a positive integer");
-                }
-                if (updatedOrder.OrderId != orderId)
-                {
-                    return Results.BadRequest("Order ID in the body does not match the Order ID in the URL.");
-                }
+                if (orderId < 0) return Results.BadRequest("Order ID needs to be a positive integer");
+                if (updatedOrder.OrderId != orderId) return Results.BadRequest("Order ID in the body does not match the Order ID in the URL.");
 
                 await orderRepo.UpdateAsync(updatedOrder);
                 return Results.NoContent();
@@ -57,10 +48,7 @@ namespace Project.Endpoints
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
 
-                if (orderId < 0)
-                {
-                    return Results.BadRequest("Order ID needs to be a positive integer");
-                }
+                if (orderId < 0) return Results.BadRequest("Order ID needs to be a positive integer");
 
                 Order order = await orderRepo.GetByIdAsync(orderId);
                 await orderRepo.DeleteAsync(order);

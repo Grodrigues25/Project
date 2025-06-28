@@ -1,5 +1,8 @@
-﻿namespace Project.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Project.Models
 {
+    [Keyless]
     public class OrderItems
     {
         public required int OrderId { get; set; }

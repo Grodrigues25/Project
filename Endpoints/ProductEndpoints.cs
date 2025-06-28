@@ -18,10 +18,7 @@ namespace Project.Endpoints
             
             app.MapGet("/Product/{ProductId}", async (IRepository<Product> productRepo, int productId) =>
             {
-                if (productId < 0)
-                {
-                    return Results.BadRequest("Product ID need to be a positive integer");
-                }
+                if (productId < 0) return Results.BadRequest("Product ID need to be a positive integer");
 
                 var product = await productRepo.GetByIdAsync(productId);
                 return product != null ? Results.Ok(product) : Results.NotFound($"There is no product with ID {productId}.");                
@@ -44,14 +41,9 @@ namespace Project.Endpoints
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
 
-                if (productId < 0)
-                {
-                    return Results.BadRequest("Product ID need to be a positive integer");
-                }
-                if (updatedProduct.ProductId != productId)
-                {
-                    return Results.BadRequest("Product ID in the body does not match the Product ID in the URL.");
-                }
+                if (productId < 0) return Results.BadRequest("Product ID need to be a positive integer");
+                if (updatedProduct.ProductId != productId) return Results.BadRequest("Product ID in the body does not match the Product ID in the URL.");
+
                 await productRepo.UpdateAsync(updatedProduct);
                 
                 return Results.NoContent();

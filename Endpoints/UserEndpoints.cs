@@ -28,10 +28,8 @@ namespace Project.Endpoints
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
 
-                if (userId < 0)
-                {
-                    return Results.BadRequest("User ID need to be a positive integer");
-                }
+                if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
+
                 var user = await userRepo.GetByIdAsync(userId);
                 return user != null ? Results.Ok(user) : Results.NotFound($"There is no product with ID {userId}.");
 
@@ -49,27 +47,15 @@ namespace Project.Endpoints
 
             app.MapPut("/Users/{UserId}", async (User user, int userId, IAuthenticationService auth, IRepository<User> userRepo) =>
             {
-                if (userId < 0)
-                {
-                    return Results.BadRequest("User ID need to be a positive integer");
-                }
-                if (user.UserId != userId)
-                {
-                    return Results.BadRequest("User ID in the body does not match the User ID in the URL.");
-                }
+                if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
+                if (user.UserId != userId) return Results.BadRequest("User ID in the body does not match the User ID in the URL.");
 
                 var PasswordHasher = new PasswordHasher<User>();
                 user.Password = PasswordHasher.HashPassword(user, user.Password);
 
                 int resultCode = await userRepo.UpdateAsync(user);
-                if (resultCode > 0)
-                {
-                    return Results.NoContent();
-                }
-                else
-                {
-                    return Results.NotFound($"There is no user with ID {userId}.");
-                }
+                if (resultCode > 0) return Results.NoContent();
+                else return Results.NotFound($"There is no user with ID {userId}.");
 
             }).RequireAuthorization("userAccess", "adminAccess");
 
@@ -78,11 +64,7 @@ namespace Project.Endpoints
 
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
-
-                if (userId < 0)
-                {
-                    return Results.BadRequest("User ID need to be a positive integer");
-                }
+                if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
 
                 User user = await userRepo.GetByIdAsync(userId);
                 await userRepo.DeleteAsync(user);
