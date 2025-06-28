@@ -11,10 +11,7 @@ namespace Project.Endpoints
             app.MapPost("/auth/login", async (IAuthenticationService authService, LoginRequestModel request) =>
             {
                 var result = await authService.Authenticate(request);
-                if (result == null)
-                {
-                    return Results.Unauthorized();
-                }
+                if (result == null) return Results.Unauthorized();
 
                 return Results.Ok(result);
             });
@@ -22,12 +19,10 @@ namespace Project.Endpoints
             app.MapPost("/auth/logout", async (IAuthenticationService authService, IRepository<BlacklistModel> blacklistRepo, BlacklistModel token) =>
             {
                 var result = await authService.LogOut(blacklistRepo, token);
-                if (!result)
-                {
-                    return Results.BadRequest("Logout failed.");
-                }
+                if (!result) return Results.BadRequest("Logout failed.");
+
                 return Results.Ok("Logged out successfully.");
-            });
+            }).RequireAuthorization("userAccess", "adminAccess");
         }
     }
 }

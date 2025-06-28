@@ -15,6 +15,8 @@ namespace Project.Services
         public DbSet<User> user { get; set; }
         public DbSet<Product> product { get; set; }
         public DbSet<BlacklistModel> blacklist { get; set; }
+        public DbSet<Order> order { get; set; }
+        public DbSet<OrderItems> orderItems { get; set; }
 
         // https://learn.microsoft.com/en-us/ef/core/modeling/
         #region Required
@@ -23,9 +25,27 @@ namespace Project.Services
             // https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations
 
             modelBuilder.Entity<User>()
-                .HasIndex(b => b.Email)
+                .HasIndex(user => user.Email)
                 .IsUnique();
-        }
+
+            modelBuilder.Entity<User>()
+                .HasMany<Order>()
+                .WithOne()
+                .HasForeignKey(order => order.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<Order>()
+                .HasMany<OrderItems>()
+                .WithOne()
+                .HasForeignKey(orderItem => orderItem.OrderId)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .HasMany<OrderItems>()
+                .WithOne()
+                .HasForeignKey(orderItem => orderItem.ProductId)
+                .IsRequired();
+        }  
         #endregion
     }
 }
