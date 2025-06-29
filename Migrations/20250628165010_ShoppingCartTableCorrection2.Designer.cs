@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project.Services;
 
@@ -11,9 +12,11 @@ using Project.Services;
 namespace Project.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250628165010_ShoppingCartTableCorrection2")]
+    partial class ShoppingCartTableCorrection2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,12 +114,6 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.ShoppingCart", b =>
                 {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
-
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
@@ -128,8 +125,6 @@ namespace Project.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    b.HasKey("CartId");
 
                     b.HasIndex("ProductId");
 
