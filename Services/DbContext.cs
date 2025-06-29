@@ -17,6 +17,7 @@ namespace Project.Services
         public DbSet<BlacklistModel> blacklist { get; set; }
         public DbSet<Order> order { get; set; }
         public DbSet<OrderItems> orderItems { get; set; }
+        public DbSet<ShoppingCart> shoppingCarts { get; set; }
 
         // https://learn.microsoft.com/en-us/ef/core/modeling/
         #region Required
@@ -34,6 +35,7 @@ namespace Project.Services
                 .HasForeignKey(order => order.UserId)
                 .IsRequired();
 
+            // Order Items Constraints
             modelBuilder.Entity<Order>()
                 .HasMany<OrderItems>()
                 .WithOne()
@@ -44,6 +46,19 @@ namespace Project.Services
                 .HasMany<OrderItems>()
                 .WithOne()
                 .HasForeignKey(orderItem => orderItem.ProductId)
+                .IsRequired();
+
+            // Shopping Cart Constraints
+            modelBuilder.Entity<User>()
+                .HasMany<ShoppingCart>()
+                .WithOne()
+                .HasForeignKey(ShoppingCartItem => ShoppingCartItem.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .HasMany<ShoppingCart>()
+                .WithOne()
+                .HasForeignKey(ShoppingCartItem => ShoppingCartItem.ProductId)
                 .IsRequired();
         }  
         #endregion

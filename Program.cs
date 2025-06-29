@@ -78,6 +78,7 @@ app.RegisterUserEndpoints();
 app.RegisterProductEndpoints();
 app.RegisterAuthenticationEndpoints();
 app.RegisterOrderEndpoints();
+app.RegisterShoppingEndpoints();
 
 app.UseAuthentication();
 app.UseAuthorization();

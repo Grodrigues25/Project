@@ -43,7 +43,8 @@ public class AuthenticationService : IAuthenticationService
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Name, request.Email),
-            new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "admin" : "user")
+            new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "admin" : "user"),
+            new Claim("id", userAccount.UserId.ToString())
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
