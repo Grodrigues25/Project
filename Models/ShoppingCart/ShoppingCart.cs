@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Project.Models
+namespace Project.Models.ShoppingCart
 {
     [PrimaryKey(nameof(CartId))]
     public class ShoppingCart
@@ -9,8 +9,8 @@ namespace Project.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CartId { get; set; }
         public int UserId { get; set; } 
-        public int ProductId { get; set; }
-        public float Price { get; set; }
-        public int Quantity { get; set; }
+        public required float TotalPrice { get; set; }
+        public required int TotalQuantity { get; set; }
+        public bool isCheckedOut { get; set; } = false;
     }
 }

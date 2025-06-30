@@ -71,16 +71,8 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<bool> LogOut(IRepository<BlacklistModel> blacklistRepo, BlacklistModel token)
     {
-        try
-        {
-            await blacklistRepo.AddAsync(token);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            // Log the exception (ex) as needed
-            return false;
-        }
+        await blacklistRepo.AddAsync(token);
+        return true;
     }
 
     public async Task<bool> ValidateJwtToken(HttpRequest request)

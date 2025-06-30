@@ -90,6 +90,22 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
 - **ShoppingCart**: Manages user shopping carts.
 - **OrderItems**: Links products to orders with quantities and prices.
 
+
+# Implementation Details
+## SQL Full-Text Search
+
+CATALOG CREATION:
+```sql
+CREATE FULLTEXT CATALOG ProductSearch AS DEFAULT;
+```
+
+SQL Full-Text Index Creation:
+```sql
+CREATE FULLTEXT INDEX ON product(Name, Description, Category)
+  KEY INDEX PK_Product ON ProductSearch 
+  WITH STOPLIST = OFF, CHANGE_TRACKING AUTO;
+```
+
 ---
 
 For more details, see the individual files and directories linked above.

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Models;
 using Project.Models.Authentication;
+using Project.Models.ShoppingCart;
 
 // https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-dotnet-entity-framework-core-quickstart?view=azuresql&tabs=dotnet-cli%2Cservice-connector%2Cportal
 
@@ -18,6 +19,7 @@ namespace Project.Services
         public DbSet<Order> order { get; set; }
         public DbSet<OrderItems> orderItems { get; set; }
         public DbSet<ShoppingCart> shoppingCarts { get; set; }
+        public DbSet<ShoppingCartItems> shoppingCartItems { get; set; }  
 
         // https://learn.microsoft.com/en-us/ef/core/modeling/
         #region Required
@@ -55,12 +57,19 @@ namespace Project.Services
                 .HasForeignKey(ShoppingCartItem => ShoppingCartItem.UserId)
                 .IsRequired();
 
-            modelBuilder.Entity<Product>()
-                .HasMany<ShoppingCart>()
+            // Shopping Cart Items Constraints
+            modelBuilder.Entity<ShoppingCart>()
+                .HasMany<ShoppingCartItems>()
                 .WithOne()
-                .HasForeignKey(ShoppingCartItem => ShoppingCartItem.ProductId)
+                .HasForeignKey(cartItem => cartItem.CartId)
                 .IsRequired();
-        }  
+
+            modelBuilder.Entity<Product>()
+                .HasMany<ShoppingCartItems>()
+                .WithOne()
+                .HasForeignKey(cartItem => cartItem.ProductId)
+                .IsRequired();
+        }
         #endregion
     }
 }

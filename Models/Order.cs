@@ -15,7 +15,6 @@ namespace Project.Models
         public required float TotalPrice { get; set; }
         [Required(ErrorMessage = "Status is required")]
         public required string Status { get; set; }
-        Add commentMore actions
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }
