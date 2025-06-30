@@ -5,6 +5,7 @@ namespace Project.Models
 
 {
     [PrimaryKey(nameof(ProductId))]
+    [Index(nameof(Name), nameof(Description), nameof(Category))]
     public class Product
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
