@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project.Models.Authentication
 {
@@ -6,6 +7,7 @@ namespace Project.Models.Authentication
 
     public class BlacklistModel
     {
+        [Required(ErrorMessage = "Token is required")]
         public required string Token { get; set; }
     }
 }
