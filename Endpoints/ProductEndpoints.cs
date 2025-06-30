@@ -1,6 +1,7 @@
 ﻿using Project.Models;
 using Project.Services.Repository;
 using Project.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Project.Endpoints
@@ -60,6 +61,14 @@ namespace Project.Endpoints
                 
                 return Results.NoContent();
             }).RequireAuthorization("adminAccess");
+
+            app.MapGet("/Product/Search/{searchTerm}", async (IRepository<Product> productRepo, string searchTerm, UserDbContext context) =>
+            {
+                if (searchTerm == null) return Results.BadRequest("Please provide a search term");
+
+                var results = await context.product.Where(p => EF.Functions.FreeText(p.Name, searchTerm) || EF.Functions.FreeText(p.Description, searchTerm) || EF.Functions.FreeText(p.Category, searchTerm)).ToListAsync();
+                return results != null ? Results.Ok(results) : Results.NotFound("No products found matching the search term.");
+            });
         }
     }
 }
