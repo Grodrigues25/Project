@@ -21,6 +21,7 @@ namespace Project.Services
 
         public async Task<AddToCartModelResponseModel> AddToCart(Product product, int quantity, HttpContext context)
         {
+            // Correct shopping cart logic to add total price and quantity
             var userClaims = context.User.Identity as ClaimsIdentity;
             var userId = int.Parse(userClaims.FindFirst("id").Value);
 
@@ -33,8 +34,8 @@ namespace Project.Services
                 ShoppingCart newUserCart = new ShoppingCart
                 {
                     UserId = userId,
-                    TotalPrice = product.Price * quantity,
-                    TotalQuantity = quantity,
+                    TotalPrice = 0,
+                    TotalQuantity = 0,
                     isCheckedOut = false
                 };
 
@@ -78,10 +79,20 @@ namespace Project.Services
             return userCart;
         }
 
-        public async Task<ShoppingCartItems?> GetShoppingCartItemsAsync(HttpContext context, ShoppingCart userCart)
+        public async Task<List<ShoppingCartItems>?> GetShoppingCartItemsAsync(HttpContext context, ShoppingCart userCart)
         {
             var userCartItems = await _dbcontext.shoppingCartItems
                 .Where(item => item.CartId == userCart.CartId && !userCart.isCheckedOut)
+                .ToListAsync();
+
+            return userCartItems;
+        }
+
+
+        public async Task<ShoppingCartItems?> GetShoppingCartItemByIdAsync(HttpContext context, ShoppingCart userCart, int productId)
+        {
+            var userCartItems = await _dbcontext.shoppingCartItems
+                .Where(item => item.CartId == userCart.CartId && !userCart.isCheckedOut && item.ProductId == productId)
                 .FirstOrDefaultAsync();
 
             return userCartItems;

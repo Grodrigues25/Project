@@ -7,6 +7,7 @@ namespace Project.Services
     {
         Task<AddToCartModelResponseModel> AddToCart(Product product, int quantity, HttpContext context);
         Task<ShoppingCart?> GetUserCartAsync(HttpContext context);
-        Task<ShoppingCartItems?> GetShoppingCartItemsAsync (HttpContext context, ShoppingCart userCart);
+        Task<List<ShoppingCartItems>?> GetShoppingCartItemsAsync (HttpContext context, ShoppingCart userCart);
+        Task<ShoppingCartItems?> GetShoppingCartItemByIdAsync(HttpContext context, ShoppingCart userCart, int productId);
     }
 }
