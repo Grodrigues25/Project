@@ -8,6 +8,7 @@ using System.Text;
 using Project.Services.Authentication;
 using Project.Services.ShoppingCartService;
 using Project.Services.Database;
+using Project.Models.Security;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -16,6 +17,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
 builder.Services.AddScoped(typeof(IShoppingCartService), typeof(ShoppingCartService));
+builder.Services.AddScoped(typeof(ISecurityService), typeof(SecurityService));
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())

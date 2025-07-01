@@ -1,10 +1,7 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Identity;
-using Project.Models.Security;
+﻿using Project.Models.Security;
 using Project.Models.Users;
 using Project.Services.Authentication;
 using Project.Services.Repository;
-using System.Security.Claims;
 
 namespace Project.Endpoints
 {
