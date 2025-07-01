@@ -1,7 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
 using Project.Models;
-using Project.Services;
+using Project.Services.Authentication;
 using Project.Services.Repository;
 using System.Security.Claims;
 
@@ -31,9 +31,8 @@ namespace Project.Endpoints
                 if (!tokenIsValid) return Results.Unauthorized();
 
                 // constraint so each standard user can only access their own data
-                var userClaims = request.HttpContext.User.Identity as ClaimsIdentity;
-                var userIdInToken = int.Parse(userClaims.FindFirst("id").Value);
-                var userRoleInToken = userClaims.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+                var userIdInToken = auth.GetUserIdFromJwtToken(request.HttpContext);
+                var userRoleInToken = auth.GetRoleFromJwtToken(request.HttpContext);
                 if (userRoleInToken != "admin" || userIdInToken != userId) return Results.Unauthorized();
 
                 if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
