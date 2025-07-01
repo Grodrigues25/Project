@@ -100,6 +100,9 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
     - **SecurityService**: Helper service to handle security-related operations, such as password hashing.
 - **/Properties**: Project metadata and settings.
 
+### Note on API Endpoint Testing in Postman/Bruno
+In the project files you can find the files DevAcademy.json and DevAcademyPostman.json. The first file contains the endpoint testing as exported from Bruno. The second is the Postman version. Throughout the development I've tested the endpoints using Bruno. 
+
 # API Endpoint Responses
 The Microsoft.AspNetCore.Http.Results namespace is used to define the responses for the API endpoints. The following main ones were relied upon on this project:
 - **Results.Ok**: Used to return a 200 OK response with the requested data.

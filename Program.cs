@@ -19,6 +19,7 @@ builder.Services.AddScoped(typeof(IAuthenticationService), typeof(Authentication
 builder.Services.AddScoped(typeof(IShoppingCartService), typeof(ShoppingCartService));
 builder.Services.AddScoped(typeof(ISecurityService), typeof(SecurityService));
 builder.Services.AddScoped(typeof(IReportingService), typeof(ReportingService));
+builder.Services.AddScoped(typeof(IDatabaseService), typeof(DatabaseService));
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())

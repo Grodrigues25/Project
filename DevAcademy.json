@@ -1,0 +1,818 @@
+{
+  "name": "DevAcademy",
+  "version": "1",
+  "items": [
+    {
+      "type": "folder",
+      "name": "Products",
+      "filename": "Products",
+      "root": {
+        "meta": {
+          "name": "Products"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "Add Product",
+          "filename": "Add Product.bru",
+          "seq": 2,
+          "request": {
+            "url": "https://localhost:7149/Product",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n    \"Name\": \"La Sportiva Competition 2\",\n    \"Price\": 169.99,\n    \"Stock\": 2,\n    \"Description\": \"Climbing shoes\",\n    \"Category\": \"Climbing\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Delete Product",
+          "filename": "Delete Product.bru",
+          "seq": 3,
+          "request": {
+            "url": "https://localhost:7149/Product/11",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Products",
+          "filename": "Get Products.bru",
+          "seq": 1,
+          "request": {
+            "url": "https://localhost:7149/Product",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "none"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Modify Product",
+          "filename": "Modify Product.bru",
+          "seq": 4,
+          "request": {
+            "url": "https://localhost:7149",
+            "method": "PUT",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Product Search",
+          "filename": "Product Search.bru",
+          "seq": 5,
+          "request": {
+            "url": "https://localhost:7149/Product/Search/Gri Gri",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "",
+              "text": "\"Futura\"",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "none"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Authentication",
+      "filename": "Authentication",
+      "root": {
+        "meta": {
+          "name": "Authentication"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "Login",
+          "filename": "Login.bru",
+          "seq": 1,
+          "request": {
+            "url": "https://localhost:7149/auth/login",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"Email\": \"grodrigues@microsoft.com\",\n  \"Password\": \"grodrigues\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Logout",
+          "filename": "Logout.bru",
+          "seq": 2,
+          "request": {
+            "url": "https://localhost:7149/auth/logout",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Orders",
+      "filename": "Orders",
+      "root": {
+        "meta": {
+          "name": "Orders"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "Create Manual Order",
+          "filename": "Create Manual Order.bru",
+          "seq": 2,
+          "request": {
+            "url": "https://localhost:7149/Order",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"UserId\": \"12\",\n  \"TotalPrice\": \"35.99\",\n  \"Status\": \"Shipped\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Delete Order",
+          "filename": "Delete Order.bru",
+          "seq": 4,
+          "request": {
+            "url": "https://localhost:7149/Order/2",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Orders",
+          "filename": "Get Orders.bru",
+          "seq": 1,
+          "request": {
+            "url": "https://localhost:7149/Order",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Modify Order",
+          "filename": "Modify Order.bru",
+          "seq": 3,
+          "request": {
+            "url": "https://localhost:7149/Order/2",
+            "method": "PUT",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "  {\n    \"orderId\": 2,\n    \"userId\": 11,\n    \"totalPrice\": 18.99,\n    \"status\": \"Shipping\"\n  }",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "CartItem",
+      "filename": "CartItem",
+      "root": {
+        "meta": {
+          "name": "CartItem"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "Add Product to Cart",
+          "filename": "Add Product to Cart.bru",
+          "seq": 1,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/6/3",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Delete Item from Cart",
+          "filename": "Delete Item from Cart.bru",
+          "seq": 6,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/7",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Delete Shopping Cart",
+          "filename": "Delete Shopping Cart.bru",
+          "seq": 5,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/ClearCart/",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Shopping Cart Items",
+          "filename": "Get Shopping Cart Items.bru",
+          "seq": 3,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/Items",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Shopping Cart",
+          "filename": "Get Shopping Cart.bru",
+          "seq": 2,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Submit Shopping as an Order",
+          "filename": "Submit Shopping as an Order.bru",
+          "seq": 7,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/Checkout",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Update Cart Item",
+          "filename": "Update Cart Item.bru",
+          "seq": 4,
+          "request": {
+            "url": "https://localhost:7149/ShoppingCart/7/1",
+            "method": "PUT",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Users",
+      "filename": "Users",
+      "root": {
+        "meta": {
+          "name": "Users"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "Add User",
+          "filename": "Add User.bru",
+          "seq": 2,
+          "request": {
+            "url": "https://localhost:7149/Users",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n    \"firstName\": \"test4\",\n    \"lastName\": \"test4\",\n    \"email\": \"test4@microsoft.com\",\n    \"password\": \"test4\",\n    \"isAdmin\": false\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Delete User",
+          "filename": "Delete User.bru",
+          "seq": 3,
+          "request": {
+            "url": "https://localhost:7149/Users/13",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get User",
+          "filename": "Get User.bru",
+          "seq": 1,
+          "request": {
+            "url": "https://localhost:7149/Users/",
+            "method": "GET",
+            "headers": [
+              {
+                "name": "",
+                "value": "",
+                "enabled": true
+              }
+            ],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Modify User",
+          "filename": "Modify User.bru",
+          "seq": 4,
+          "request": {
+            "url": "https://localhost:7149/Users/11",
+            "method": "PUT",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"userId\": 11,\n  \"firstName\": \"test5\",\n  \"lastName\": \"test2\",\n  \"email\": \"test2@microsoft.com\",\n  \"isAdmin\": true\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Reports",
+      "filename": "Reports",
+      "root": {
+        "meta": {
+          "name": "Reports"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "Get Monthly Sales",
+          "filename": "Get Monthly Sales.bru",
+          "seq": 1,
+          "request": {
+            "url": "https://localhost:7149/Reporting/TotalSales/Month/7",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Most Popular Products",
+          "filename": "Get Most Popular Products.bru",
+          "seq": 4,
+          "request": {
+            "url": "https://localhost:7149/Reporting/MostPopularProducts",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Top Customers",
+          "filename": "Get Top Customers.bru",
+          "seq": 5,
+          "request": {
+            "url": "https://localhost:7149/Reporting/TopCustomers",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Total Sales",
+          "filename": "Get Total Sales.bru",
+          "seq": 3,
+          "request": {
+            "url": "https://localhost:7149/Reporting/TotalSales/",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Yearly Sales",
+          "filename": "Get Yearly Sales.bru",
+          "seq": 2,
+          "request": {
+            "url": "https://localhost:7149/Reporting/TotalSales/Year/2025",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "environments": [],
+  "root": {
+    "request": {
+      "auth": {
+        "mode": "bearer",
+        "bearer": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZ3JvZHJpZ3Vlc0BtaWNyb3NvZnQuY29tIiwicm9sZSI6ImFkbWluIiwiaWQiOiIxMiIsIm5iZiI6MTc1MTQwNzU5OCwiZXhwIjoxNzUxNDA5Mzk4LCJpYXQiOjE3NTE0MDc1OTgsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzE0OSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxNDkifQ.sKDAMFDIuKFpST4a2sUKUwd-puXqgqfpPqTzyV-rOxk"
+        }
+      }
+    }
+  },
+  "brunoConfig": {
+    "version": "1",
+    "name": "DevAcademy",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ],
+    "size": 0.0048503875732421875,
+    "filesCount": 34
+  }
+}

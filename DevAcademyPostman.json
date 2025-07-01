@@ -1,0 +1,805 @@
+{
+  "info": {
+    "name": "DevAcademy",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Add Product",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Product",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Product"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Name\": \"La Sportiva Competition 2\",\n    \"Price\": 169.99,\n    \"Stock\": 2,\n    \"Description\": \"Climbing shoes\",\n    \"Category\": \"Climbing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Product/11",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Product",
+                "11"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Products",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Product",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Product"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Modify Product",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Product Search",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Product/Search/Gri Gri",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Product",
+                "Search",
+                "Gri Gri"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/auth/login",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Email\": \"grodrigues@microsoft.com\",\n  \"Password\": \"grodrigues\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/auth/logout",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Manual Order",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Order",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Order"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"UserId\": \"12\",\n  \"TotalPrice\": \"35.99\",\n  \"Status\": \"Shipped\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Order",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Order/2",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Order",
+                "2"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Orders",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Order",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Order"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Modify Order",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Order/2",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Order",
+                "2"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "  {\n    \"orderId\": 2,\n    \"userId\": 11,\n    \"totalPrice\": 18.99,\n    \"status\": \"Shipping\"\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CartItem",
+      "item": [
+        {
+          "name": "Add Product to Cart",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/6/3",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                "6",
+                "3"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Delete Item from Cart",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/7",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                "7"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Delete Shopping Cart",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/ClearCart/",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                "ClearCart",
+                ""
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Shopping Cart Items",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/Items",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                "Items"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Shopping Cart",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                ""
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Submit Shopping as an Order",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/Checkout",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                "Checkout"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update Cart Item",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/ShoppingCart/7/1",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "ShoppingCart",
+                "7",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Add User",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Users",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Users"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"test4\",\n    \"lastName\": \"test4\",\n    \"email\": \"test4@microsoft.com\",\n    \"password\": \"test4\",\n    \"isAdmin\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Users/13",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Users",
+                "13"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Users/",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Users",
+                ""
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modify User",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Users/11",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Users",
+                "11"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 11,\n  \"firstName\": \"test5\",\n  \"lastName\": \"test2\",\n  \"email\": \"test2@microsoft.com\",\n  \"isAdmin\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get Monthly Sales",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Reporting/TotalSales/Month/7",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Reporting",
+                "TotalSales",
+                "Month",
+                "7"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Most Popular Products",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Reporting/MostPopularProducts",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Reporting",
+                "MostPopularProducts"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Top Customers",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Reporting/TopCustomers",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Reporting",
+                "TopCustomers"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Total Sales",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Reporting/TotalSales/",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Reporting",
+                "TotalSales",
+                ""
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Yearly Sales",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "https://localhost:7149/Reporting/TotalSales/Year/2025",
+              "protocol": "https",
+              "host": [
+                "localhost:7149"
+              ],
+              "path": [
+                "Reporting",
+                "TotalSales",
+                "Year",
+                "2025"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": []
+}

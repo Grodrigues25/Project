@@ -5,6 +5,7 @@ using Project.Models.ShoppingCart;
 using Project.Services.Database;
 using Project.Services.Repository;
 using Project.Services.ShoppingCartService;
+using Project.Services.Authentication;
 
 namespace Project.Endpoints
 {
@@ -12,14 +13,25 @@ namespace Project.Endpoints
     {
         public static void RegisterShoppingCartEndpoints(this WebApplication app)
         {
-            app.MapGet("/ShoppingCart/", async (IShoppingCartService cartService, HttpContext context) => 
+            app.MapGet("/ShoppingCart/", async (IShoppingCartService cartService, IAuthenticationService auth, HttpContext context) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 return userCart != null ? Results.Ok(userCart) : Results.NotFound("No active shopping cart found for the user.");
             });
 
-            app.MapGet("/ShoppingCart/Items", async (IShoppingCartService cartService, HttpContext context) => 
+            app.MapGet("/ShoppingCart/Items", async (IShoppingCartService cartService, IAuthenticationService auth, HttpContext context) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null)
                 {
@@ -31,8 +43,14 @@ namespace Project.Endpoints
                 return userCartItems != null ? Results.Ok(userCartItems) : Results.InternalServerError("Failed to collect user cart items");
             });
 
-            app.MapPost("/ShoppingCart/{ProductId}/{Quantity}", async (IShoppingCartService cartService, IRepository<Product> productRepo, int productId, int quantity, HttpContext context) =>
+            app.MapPost("/ShoppingCart/{ProductId}/{Quantity}", async (IShoppingCartService cartService, IRepository<Product> productRepo, int productId, int quantity, IAuthenticationService auth, HttpContext context) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
+
                 if (productId < 0)
                 {
                     return Results.BadRequest("Product ID need to be a positive integer");
@@ -58,8 +76,14 @@ namespace Project.Endpoints
                 return Results.Ok(addToCartResponse);
             });
 
-            app.MapPut("/ShoppingCart/{ProductId}/{NewQuantity}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, int newQuantity, HttpContext context) =>
+            app.MapPut("/ShoppingCart/{ProductId}/{NewQuantity}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, IAuthenticationService auth,  int productId, int newQuantity, HttpContext context) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
+
                 if (newQuantity <= 0)
                 {
                     return Results.BadRequest("New quantity must be a non-negative integer higher than 0.");
@@ -93,8 +117,14 @@ namespace Project.Endpoints
                     : Results.InternalServerError("Failed to update cart item.");
             });
 
-            app.MapDelete("/ShoppingCart/ClearCart/", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, HttpContext context) =>
+            app.MapDelete("/ShoppingCart/ClearCart/", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, IAuthenticationService auth, HttpContext context) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null)
                 {
@@ -105,8 +135,14 @@ namespace Project.Endpoints
                     : Results.InternalServerError("Failed to clear shopping cart.");
             });
 
-            app.MapDelete("/ShoppingCart/{ProductId}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, HttpContext context) =>
+            app.MapDelete("/ShoppingCart/{ProductId}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, IAuthenticationService auth, int productId, HttpContext context) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null)
                 {
@@ -139,8 +175,14 @@ namespace Project.Endpoints
                     : Results.InternalServerError("Failed to delete cart item.");
             });
 
-            app.MapPost("/ShoppingCart/Checkout", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, IRepository<Order> orderRepo, IRepository<Product> productRepo, HttpContext context, UserDbContext dbcontext) => 
+            app.MapPost("/ShoppingCart/Checkout", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, IRepository<Order> orderRepo, IRepository<Product> productRepo, IAuthenticationService auth, HttpContext context, UserDbContext dbcontext) =>
             {
+                var userRole = auth.GetRoleFromJwtToken(context);
+                if (userRole != "admin" && userRole != "user")
+                {
+                    Results.Unauthorized();
+                }
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null)
                 {
