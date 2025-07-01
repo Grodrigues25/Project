@@ -11,7 +11,6 @@ using Project.Services.Database;
 using Project.Services.Reports;
 using Project.Services.Security;
 
-
 var builder = WebApplication.CreateBuilder();
 
 builder.Services.AddOpenApi();
@@ -63,7 +62,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
+        ValidateIssuerSigningKey = true,
     };
 });
 
@@ -92,4 +91,3 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();
-

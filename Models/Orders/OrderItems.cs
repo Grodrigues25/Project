@@ -8,8 +8,11 @@ namespace Project.Models.Orders
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EFKeyForOrderItems { get; set; }
-        public required int OrderId { get; set; }
-        public required int ProductId { get; set; }
-        public required int Quantity { get; set; }
+
+        required public int OrderId { get; set; }
+
+        required public int ProductId { get; set; }
+
+        required public int Quantity { get; set; }
     }
 }

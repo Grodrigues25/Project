@@ -25,6 +25,7 @@ namespace Project.Endpoints
             {
                 var yearlySales = salesReport.GetYearlySales(year);
                 return Results.Ok($"Total sales in selected year is {yearlySales}");
+
             }).RequireAuthorization("adminAccess");
 
             app.MapGet("/Reporting/MostPopularProducts", async (HttpContext context, IReportingService salesReport) =>

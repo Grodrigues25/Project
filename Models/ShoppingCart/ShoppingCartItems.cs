@@ -8,8 +8,11 @@ namespace Project.Models.ShoppingCart
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ArbitraryKeyForTracking { get; set; }
-        public required int CartId { get; set; }
-        public required int ProductId { get; set; }
-        public required int Quantity { get; set; }
+
+        required public int CartId { get; set; }
+
+        required public int ProductId { get; set; }
+
+        required public int Quantity { get; set; }
     }
 }

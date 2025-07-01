@@ -7,8 +7,8 @@ namespace Project.Services.Security
     {
         public User UserPasswordHashing(User user)
         {
-            var PasswordHasher = new PasswordHasher<User>();
-            user.Password = PasswordHasher.HashPassword(user, user.Password);
+            var passwordHasher = new PasswordHasher<User>();
+            user.Password = passwordHasher.HashPassword(user, user.Password);
 
             return user;
         }

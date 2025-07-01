@@ -11,11 +11,6 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
   - Explore advanced features like dependency injection, asynchronous programming, authentication, among many others.
   - Practice building a RESTful API using .NET 9 and the best practices in software development.
 
-- At a later stage, I will add more features to this project, such as:
-  - Adding unit and integration tests to ensure code quality.
-  - Implementing advanced error handling and logging mechanisms.
-  - Implementing caching strategies to improve performance.
-
 ## What I Learned
 - Learning Points:
   - Learned from scratch how to build a RESTful API using .NET 9. This is my first project using .NET 9 and C#.
@@ -30,6 +25,7 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
     - The change from manual implementation of the logic of each endpoint to the use of the Repository patter to keep the code DRY.
 
 ## Interesting Concepts Applied
+- **Minimal APIs**: 
 - **Dependency Injection**: The project uses [dependency injection](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) to manage service lifetimes and dependencies.
 - **Design Patterns**: Implements the [Repository Pattern](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#repository-pattern) for data access, promoting separation of concerns.
 - **Asynchronous Programming**: Implements [async/await](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/) for non-blocking I/O operations.
@@ -96,7 +92,7 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
 
  - **/Services**: Business logic and data access. Whenever applicable, repository pattern is used to abstract the data access logic from the endpoints:
     - **AuthenticationService**: Handles user authentication and JWT token management and is used to abstract the authentication logic from the endpoints. Also used to support authorization logic in the endpoints.
-    - **Database**: Contains the database context and configuration for Entity Framework Core, along with the table foreign keys and relationships.
+    - **Database**: Contains the database context and configuration for Entity Framework Core, along with the table foreign keys and relationships. Contains as well the DatabaseService which is a helper service to abstract the Fullext Search logic from the endpoints.
     - **Reports**: Contains the service logic for querying the SQLDatabase tables to generate the sales data for the report endpoints.
     - **ShoppingCartService**: Contains the service logic for managing the shopping cart, including adding, updating, and removing items.
     - **Repository**: Used to implement generic AddAsync, DeleteAsync, GetAsync, GetByIdAsync, UpdateAsync using Repository pattern for all kinds of operations for the tables involved in this project with Entity Framework. It is implemented as a template to be adaptable to the class provided.
@@ -184,5 +180,11 @@ CREATE FULLTEXT INDEX ON product(Name, Description, Category)
 
 
 ---
+## Improvements and Future Work
+- At a later stage, I will add more features to this project, such as:
+  - Adding unit and integration tests to ensure code quality.
+  - Implementing advanced error handling and logging mechanisms.
+  - Implementing caching strategies to improve performance.
+
 
 For more details, see the individual files and directories linked above.

@@ -7,6 +7,6 @@ namespace Project.Models.Authentication
     public class BlacklistModel
     {
         [Required(ErrorMessage = "Token is required")]
-        public required string Token { get; set; }
+        required public string Token { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class ReportTopProductsModel
     {
-        public required int ProductId { get; set; }
-        public required int TotalQuantity { get; set; }
+        required public int ProductId { get; set; }
 
+        required public int TotalQuantity { get; set; }
     }
 }

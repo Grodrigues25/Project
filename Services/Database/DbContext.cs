@@ -11,20 +11,27 @@ namespace Project.Services.Database
 {
     public class UserDbContext : DbContext
     {
-        public UserDbContext(DbContextOptions<UserDbContext> options) 
+        public UserDbContext(DbContextOptions<UserDbContext> options)
             : base(options)
         {
         }
+
         public DbSet<User> user { get; set; }
+
         public DbSet<Product> product { get; set; }
+
         public DbSet<BlacklistModel> blacklist { get; set; }
+
         public DbSet<Order> order { get; set; }
+
         public DbSet<OrderItems> orderItems { get; set; }
+
         public DbSet<ShoppingCart> shoppingCarts { get; set; }
-        public DbSet<ShoppingCartItems> shoppingCartItems { get; set; }  
+
+        public DbSet<ShoppingCartItems> shoppingCartItems { get; set; }
 
         // https://learn.microsoft.com/en-us/ef/core/modeling/
-        #region Required
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations
@@ -72,6 +79,5 @@ namespace Project.Services.Database
                 .HasForeignKey(cartItem => cartItem.ProductId)
                 .IsRequired();
         }
-        #endregion
     }
 }

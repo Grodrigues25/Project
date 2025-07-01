@@ -8,9 +8,13 @@ namespace Project.Models.ShoppingCart
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CartId { get; set; }
-        public int UserId { get; set; } 
-        public required float TotalPrice { get; set; }
-        public required int TotalQuantity { get; set; }
+
+        public int UserId { get; set; }
+
+        required public float TotalPrice { get; set; }
+
+        required public int TotalQuantity { get; set; }
+
         public bool isCheckedOut { get; set; } = false;
     }
 }

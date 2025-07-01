@@ -32,7 +32,7 @@ namespace Project.Services.Reports
                 .Select(group => new ReportTopProductsModel
                 {
                     ProductId = group.Key,
-                    TotalQuantity = group.Sum(item => item.Quantity)
+                    TotalQuantity = group.Sum(item => item.Quantity),
                 })
                 .ToList();
 
@@ -51,7 +51,7 @@ namespace Project.Services.Reports
                 .Select(group => new ReportTopCustomersModel
                 {
                     UserId = group.Key,
-                    TotalSpent = group.Sum(orders => orders.TotalPrice)
+                    TotalSpent = group.Sum(orders => orders.TotalPrice),
                 })
                 .ToList();
 

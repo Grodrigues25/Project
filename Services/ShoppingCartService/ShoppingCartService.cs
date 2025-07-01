@@ -39,7 +39,7 @@ namespace Project.Services.ShoppingCartService
                     UserId = userId,
                     TotalPrice = 0,
                     TotalQuantity = 0,
-                    isCheckedOut = false
+                    isCheckedOut = false,
                 };
 
                 await _cartRepo.AddAsync(newUserCart);
@@ -60,7 +60,7 @@ namespace Project.Services.ShoppingCartService
             };
 
             await _cartItemsRepo.AddAsync(userCartItem);
-            
+
             return new AddToCartModelResponseModel
             {
                 UserId = userId,
@@ -90,7 +90,6 @@ namespace Project.Services.ShoppingCartService
             return userCartItems;
         }
 
-
         public async Task<ShoppingCartItems?> GetShoppingCartItemByIdAsync(HttpContext context, ShoppingCart userCart, int productId)
         {
             var userCartItems = await _dbcontext.shoppingCartItems
@@ -99,6 +98,5 @@ namespace Project.Services.ShoppingCartService
 
             return userCartItems;
         }
-
     }
 }
