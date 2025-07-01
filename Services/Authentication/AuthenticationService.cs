@@ -48,7 +48,7 @@ public class AuthenticationService : IAuthenticationService
         {
             new Claim(JwtRegisteredClaimNames.Name, request.Email),
             new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "admin" : "user"),
-            new Claim("id", userAccount.UserId.ToString())
+            new Claim("id", userAccount.UserId.ToString()),
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -68,7 +68,7 @@ public class AuthenticationService : IAuthenticationService
         {
             AccessToken = accessToken,
             Email = request.Email,
-            ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds
+            ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds,
         };
 
     }
@@ -84,11 +84,12 @@ public class AuthenticationService : IAuthenticationService
     {
         var token = GetJwtTokenFromRequest(request);
         var tokenBlacklisted = await _dbcontext.blacklist.Where(u => u.Token == token.Token).FirstOrDefaultAsync();
-        
+
         if (tokenBlacklisted != null)
         {
             return false; // Token is blacklisted
         }
+
         return true; // Token is not blacklisted
     }
 
@@ -116,7 +117,7 @@ public class AuthenticationService : IAuthenticationService
 
         BlacklistModel token = new BlacklistModel
         {
-            Token = tokenString
+            Token = tokenString,
         };
 
         return token;

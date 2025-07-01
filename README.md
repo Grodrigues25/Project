@@ -24,8 +24,7 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
     - The change from synchronous programming to asynchronous to improve performance and scalability.
     - The change from manual implementation of the logic of each endpoint to the use of the Repository patter to keep the code DRY.
 
-## Interesting Concepts Applied
-- **Minimal APIs**: 
+## Interesting Concepts Applied 
 - **Dependency Injection**: The project uses [dependency injection](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) to manage service lifetimes and dependencies.
 - **Design Patterns**: Implements the [Repository Pattern](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#repository-pattern) for data access, promoting separation of concerns.
 - **Asynchronous Programming**: Implements [async/await](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/) for non-blocking I/O operations.
@@ -37,8 +36,10 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
 ## Notable Libraries and Technologies
 - [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9)
 - [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/) for building web APIs.
+- [Minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis) for simplified API development.
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) for data access.
 - [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity) for user management, password hashing, and JWT token operations.
+- [Azure SQL Database](https://learn.microsoft.com/en-us/azure/azure-sql/database/) for relational database.
 
 ## Project Structure
 - **/Endpoints**: Contains API endpoint logic:
@@ -96,7 +97,38 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
     - **Reports**: Contains the service logic for querying the SQLDatabase tables to generate the sales data for the report endpoints.
     - **ShoppingCartService**: Contains the service logic for managing the shopping cart, including adding, updating, and removing items.
     - **Repository**: Used to implement generic AddAsync, DeleteAsync, GetAsync, GetByIdAsync, UpdateAsync using Repository pattern for all kinds of operations for the tables involved in this project with Entity Framework. It is implemented as a template to be adaptable to the class provided.
+    - **SecurityService**: Helper service to handle security-related operations, such as password hashing.
 - **/Properties**: Project metadata and settings.
+
+# API Endpoint Responses
+The Microsoft.AspNetCore.Http.Results namespace is used to define the responses for the API endpoints. The following main ones were relied upon on this project:
+- **Results.Ok**: Used to return a 200 OK response with the requested data.
+- **Results.Created**: Used to return a 201 Created response when a new resource is successfully created.
+- **Results.NoContent**: Used to return a 204 No Content response when an operation is successful but there is no content to return (e.g., after a DELETE operation).
+- **Results.BadRequest**: Used to return a 400 Bad Request response when the request is invalid or missing required parameters.
+- **Results.Unauthorized**: Used to return a 401 Unauthorized response when the user is not authenticated or the JWT token is invalid.
+- **Results.NotFound**: Used to return a 404 Not Found response when a requested resource does not exist.
+- **Results.InternalServerError**: Used to return a 500 Internal Server Error response when an unexpected error occurs.
+
+### Note on Endpoint Responses
+- The PUT endpoints all enforce full object details to be provided in request body to make sure all PUT requests are idempotent and the object is fully replaced in the database.
+
+# JWT Authentication
+The project implements JWT (JSON Web Token) authentication for secure API access. The authentication flow is as follows:
+1. **User Registration**: Users can register by providing their email and password. Passwords are hashed using the `PasswordHasher` class.
+2. **User Login**: Users can log in with their email and password. Upon successful authentication, a JWT token is generated and returned to the user. The logic for this process is handled by the AuthenticationService, specifically the Authenticate method. The JWT token was provided an expiration time of 30 minutes by default.
+3. **Token Blacklisting**: When a user logs out, the JWT token is added to a blacklist table to prevent reuse. The `BlacklistService` checks incoming tokens against this blacklist.
+
+# Authorization
+- In situations where only the Admin users should have access to the endpoint, the minimal API RequiresAuthorization method is used to enforce authorization. The "adminAccess" policy created in Program.cs is used to enforce the authorization.
+- In situations where only Users or Admins should have access to the endpoint, I check the JWT token for the user role and enforce authorization accordingly. The AuthenticationService is used to check if the user has the User or Admin role.
+- In situations where any kind of user should have access to the endpoint, no authorization checks are made.
+
+### Note on Authorization
+I did not find a good way to make the RequireAuthorization method from Minimal APIs work with multiple policies, with logic where if any single one of the policies were valid for the token, the endpoint would be accessible. Given this limitation, I opted to implement the authorization checks directly in the endpoint logic using the AuthenticationService in endpoint where either User or Admin roles should have access.
+
+# SQL Database
+For the Database I use Azure SQL Database. I configured the connection using the connection string in appsettings.json. The authentication used in Active Directory Default.
 
 ## SQL Database Tables
 - **Users**: Stores user information, including hashed passwords.
@@ -162,7 +194,6 @@ Entity Framework Implementation of Foreign Key Constraints
         #endregion
 ```
 
-# Implementation Details
 ## SQL Full-Text Search
 SQL Full-Text Search was used for simplicity and easy of implementation.
 
@@ -177,14 +208,23 @@ CREATE FULLTEXT INDEX ON product(Name, Description, Category)
   KEY INDEX PK_Product ON ProductSearch 
   WITH STOPLIST = OFF, CHANGE_TRACKING AUTO;
 ```
+---
 
+## Additional Notes:
+- For C# style enforcement, StyleCop Analyser is used to ensure code quality and consistency.
 
 ---
 ## Improvements and Future Work
 - At a later stage, I will add more features to this project, such as:
-  - Adding unit and integration tests to ensure code quality.
-  - Implementing advanced error handling and logging mechanisms.
-  - Implementing caching strategies to improve performance.
+    - The JWT token key use to sign the tokens should be stored in Azure Key Vault or equivalent for enhanced security.
+    - Implementing Refresh Tokens for JWT authentication to enhance security and user experience.
+    - Adding unit and integration tests to ensure code quality.
+    - Implementing advanced error handling and logging mechanisms.
+    - Implementing caching strategies to improve performance.
+    - If I were to deploy this API I would:
+        - Use Azure App Service for hosting the API.
+        - Use Service Principal Authentication for secure access to Azure resources, namely the Azure SQL DB supporting the API.
 
 
+---
 For more details, see the individual files and directories linked above.
