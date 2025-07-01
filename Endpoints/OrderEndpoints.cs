@@ -12,6 +12,7 @@ namespace Project.Endpoints
             {
                 var orderList = await orderRepo.GetAsync();
                 return Results.Ok(orderList);
+
             }).RequireAuthorization("adminAccess");
 
 
@@ -28,6 +29,7 @@ namespace Project.Endpoints
             {
                 await orderRepo.AddAsync(newOrder);
                 return Results.Created($"/Order/{newOrder.OrderId}", newOrder);
+
             }).RequireAuthorization("adminAccess");
 
 

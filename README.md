@@ -70,12 +70,12 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
         - PUT Endpoint for updating an order.
         - DELETE Endpoint for deleting an order.
     - Shopping Cart Endpoints (IN PROGRESS):
-        - GET Endpoint for retrieving the shopping cart of a user. (DONE)
-        - GET Endpoint for retrieving the items of the shopping cart of the user. (DONE)
-        - POST Endpoint for adding a product to the shopping cart. (DONE)
-        - PUT Endpoint for updating the quantity of a product in the shopping cart. (DONE)
-        - DELETE Endpoint for removing a product from the shopping cart. (DONE)
-        - DELETE Endpoint for clearing the entire shopping cart. (DONE)
+        - GET Endpoint for retrieving the shopping cart of a user.
+        - GET Endpoint for retrieving the items of the shopping cart of the user.
+        - POST Endpoint for adding a product to the shopping cart.
+        - PUT Endpoint for updating the quantity of a product in the shopping cart.
+        - DELETE Endpoint for removing a product from the shopping cart.
+        - DELETE Endpoint for clearing the entire shopping cart. 
         - POST Endpoint to submit the cart into an order. (IN PROGRESS)
     - Authentication Endpoints:
         - POST Endpoint for user login, returning a JWT token.

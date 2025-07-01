@@ -3,7 +3,6 @@ using Project.Models;
 using Project.Models.ShoppingCart;
 using Project.Services;
 using Project.Services.Repository;
-using System.Security.Claims;
 
 namespace Project.Endpoints
 {
@@ -44,8 +43,8 @@ namespace Project.Endpoints
 
             });
 
-            app.MapPut("/ShoppingCart/{ProductId}/{NewQuantity}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, int newQuantity, HttpContext context) =>
-            {
+            app.MapPut("/ShoppingCart/{ProductId}/{NewQuantity}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, int newQuantity, HttpContext context) => {
+
                 if (newQuantity <= 0) return Results.BadRequest("New quantity must be a non-negative integer higher than 0.");
 
                 var userCart = await cartService.GetUserCartAsync(context);
@@ -67,8 +66,8 @@ namespace Project.Endpoints
                     : Results.InternalServerError("Failed to update cart item.");
             });
 
-            app.MapDelete("/ShoppingCart/ClearCart/", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, HttpContext context) =>
-            {
+            app.MapDelete("/ShoppingCart/ClearCart/", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, HttpContext context) => {
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null) return Results.NotFound("No active shopping cart found for the user.");
 
@@ -77,8 +76,8 @@ namespace Project.Endpoints
 
             });
 
-            app.MapDelete("/ShoppingCart/{ProductId}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, HttpContext context) =>
-            {
+            app.MapDelete("/ShoppingCart/{ProductId}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, HttpContext context) => {
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null) return Results.NotFound("No active shopping cart found for the user.");
 
@@ -99,16 +98,40 @@ namespace Project.Endpoints
                     : Results.InternalServerError("Failed to delete cart item.");
             });
 
-            app.MapPost("/ShoppingCart/Checkout", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, HttpContext context) =>
-            {
+            app.MapPost("/ShoppingCart/Checkout", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, IRepository<Order> orderRepo, HttpContext context, UserDbContext dbcontext) => {
+
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null) return Results.NotFound("No active shopping cart found for the user.");
 
                 var userCartItems = await cartService.GetShoppingCartItemsAsync(context, userCart);
 
+                Order newOrder = new Order()
+                {
+                    UserId = userCart.UserId,
+                    TotalPrice = userCart.TotalPrice,
+                    Status = "Pending"
+                };
 
-                return await cartRepo.UpdateAsync(userCart) > 0 ? Results.Ok("Shopping cart checked out successfully.")
-                    : Results.InternalServerError("Failed to checkout shopping cart.");
+                await orderRepo.AddAsync(newOrder);
+
+                var userOrders = await dbcontext.order.Where(o => o.UserId == userCart.UserId).ToListAsync();
+                var newOrderInDb = userOrders[userOrders.Count - 1];
+
+                foreach (var product in userCartItems)
+                {
+                    var orderedProduct = new OrderItems()
+                    {
+                        OrderId = newOrderInDb.OrderId,
+                        ProductId = product.ProductId,
+                        Quantity = product.Quantity
+                    };
+
+                    var addingItemToOrderResult = await dbcontext.orderItems.AddAsync(orderedProduct);
+                    if (addingItemToOrderResult == null) return Results.InternalServerError("Failed to add item to order.");
+                }
+
+                return await cartRepo.DeleteAsync(userCart) > 0 ? Results.Created()
+                    : Results.InternalServerError("Failed to clear shopping cart after checkout.");
             });
         }
     }
