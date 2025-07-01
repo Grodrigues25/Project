@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Project.Models
+namespace Project.Models.Orders
 {
     [PrimaryKey(nameof(EFKeyForOrderItems))]
     public class OrderItems

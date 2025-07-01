@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project.Models;
 using Project.Models.Authentication;
+using Project.Models.Orders;
+using Project.Models.Products;
 using Project.Models.ShoppingCart;
+using Project.Models.Users;
 
 // https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-dotnet-entity-framework-core-quickstart?view=azuresql&tabs=dotnet-cli%2Cservice-connector%2Cportal
 
-namespace Project.Services
+namespace Project.Services.Database
 {
     public class UserDbContext : DbContext
     {

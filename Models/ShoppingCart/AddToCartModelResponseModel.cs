@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Project.Models.Products;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project.Models.ShoppingCart
 {

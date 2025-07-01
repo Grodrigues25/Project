@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project.Models;
+using Project.Models.Orders;
+using Project.Models.Products;
 using Project.Models.ShoppingCart;
-using Project.Services;
+using Project.Services.Database;
 using Project.Services.Repository;
+using Project.Services.ShoppingCart;
 
 namespace Project.Endpoints
 {

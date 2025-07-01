@@ -27,11 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Models\Users\" />
-    <Folder Include="Models\Products\" />
-    <Folder Include="Models\Orders\" />
-    <Folder Include="Services\Database\" />
-    <Folder Include="Services\ShoppingCart\" />
   </ItemGroup>
 
 </Project>

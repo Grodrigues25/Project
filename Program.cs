@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Project.Services;
 using Project.Endpoints;
 using Project.Services.UserManagementService;
 using Project.Services.Repository;
@@ -7,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Project.Services.Authentication;
+using Project.Services.ShoppingCart;
+using Project.Services.Database;
 
 
 var builder = WebApplication.CreateBuilder();

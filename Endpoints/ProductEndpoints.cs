@@ -1,8 +1,8 @@
-﻿using Project.Models;
-using Project.Services.Repository;
-using Project.Services;
+﻿using Project.Services.Repository;
 using Microsoft.EntityFrameworkCore;
 using Project.Services.Authentication;
+using Project.Services.Database;
+using Project.Models.Products;
 
 
 namespace Project.Endpoints

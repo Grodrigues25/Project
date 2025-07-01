@@ -1,11 +1,12 @@
 ﻿using Project.Services.Repository;
-using Project.Models;
 using Project.Models.ShoppingCart;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Project.Services.Authentication;
+using Project.Services.Database;
+using Project.Models.Products;
 
-namespace Project.Services
+namespace Project.Services.ShoppingCart
 {
     public class ShoppingCartService : IShoppingCartService
     {

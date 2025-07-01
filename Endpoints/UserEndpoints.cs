@@ -1,6 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
-using Project.Models;
+using Project.Models.Users;
 using Project.Services.Authentication;
 using Project.Services.Repository;
 using System.Security.Claims;
