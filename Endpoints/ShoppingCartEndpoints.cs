@@ -98,12 +98,22 @@ namespace Project.Endpoints
                     : Results.InternalServerError("Failed to delete cart item.");
             });
 
-            app.MapPost("/ShoppingCart/Checkout", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, IRepository<Order> orderRepo, HttpContext context, UserDbContext dbcontext) => {
+            app.MapPost("/ShoppingCart/Checkout", async (IShoppingCartService cartService, IRepository<ShoppingCart> cartRepo, IRepository<Order> orderRepo, IRepository<Product> productRepo, HttpContext context, UserDbContext dbcontext) => {
 
                 var userCart = await cartService.GetUserCartAsync(context);
                 if (userCart == null) return Results.NotFound("No active shopping cart found for the user.");
 
                 var userCartItems = await cartService.GetShoppingCartItemsAsync(context, userCart);
+
+                foreach (var item in userCartItems)
+                {
+                    var product = await productRepo.GetByIdAsync(item.ProductId);
+
+                    if (product.Stock - item.Quantity < 0) return Results.BadRequest($"Product with ID {item.ProductId} does not have enough stock. Available stock: {product.Stock}");
+
+                    product.Stock -= item.Quantity;
+                    await productRepo.UpdateAsync(product);
+                }
 
                 Order newOrder = new Order()
                 {
@@ -113,7 +123,6 @@ namespace Project.Endpoints
                 };
 
                 await orderRepo.AddAsync(newOrder);
-
                 var userOrders = await dbcontext.order.Where(o => o.UserId == userCart.UserId).ToListAsync();
                 var newOrderInDb = userOrders[userOrders.Count - 1];
 
