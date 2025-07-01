@@ -142,7 +142,7 @@ For the Database I use Azure SQL Database. I configured the connection using the
 - **ShoppingCart**: Manages user shopping carts.
 - **ShoppingCartItems**: Link user's shopping carts to the items in them.
 
-![SQL DBs schema and relationships](https://github.com/Grodrigues25/Project/tree/main/Images/SQLdbSchemaAndRelationships.png)
+![SQL DBs schema and relationships](https://github.com/Grodrigues25/Project/blob/main/Images/SQLdbSchemaAndRelationships.png?raw=true)
 
 Entity Framework Implementation of Foreign Key Constraints
 ```c#
