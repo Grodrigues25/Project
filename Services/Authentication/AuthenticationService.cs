@@ -70,7 +70,6 @@ public class AuthenticationService : IAuthenticationService
             Email = request.Email,
             ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds,
         };
-
     }
 
     public async Task<bool> LogOut(HttpRequest request)

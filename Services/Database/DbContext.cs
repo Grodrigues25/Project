@@ -5,8 +5,6 @@ using Project.Models.Products;
 using Project.Models.ShoppingCart;
 using Project.Models.Users;
 
-// https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-dotnet-entity-framework-core-quickstart?view=azuresql&tabs=dotnet-cli%2Cservice-connector%2Cportal
-
 namespace Project.Services.Database
 {
     public class UserDbContext : DbContext
@@ -34,8 +32,6 @@ namespace Project.Services.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations
-
             modelBuilder.Entity<User>()
                 .HasIndex(user => user.Email)
                 .IsUnique();

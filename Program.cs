@@ -44,7 +44,6 @@ builder.Services.AddDbContext<UserDbContext>(options =>
     });
 });
 
-// https://www.youtube.com/watch?v=w8I32UPEvj8
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

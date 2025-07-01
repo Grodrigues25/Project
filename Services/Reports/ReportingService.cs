@@ -72,7 +72,7 @@ namespace Project.Services.Reports
             return totalSales;
         }
 
-        public float  GetYearlySales(int year)
+        public float GetYearlySales(int year)
         {
             var totalYearlySales = _userDbContext.order
                 .Where(o => o.Timestamp.Year == year)

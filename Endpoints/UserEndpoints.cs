@@ -5,8 +5,6 @@ using Project.Services.Security;
 
 namespace Project.Endpoints
 {
-    // https://www.tessferrandez.com/blog/2023/10/31/organizing-minimal-apis.html
-    // https://www.youtube.com/watch?v=Wiy54682d1w
     public static class UserEndpoints
     {
         public static void RegisterUserEndpoints(this WebApplication app)
