@@ -46,9 +46,6 @@ namespace Project.Endpoints
 
             app.MapPut("/ShoppingCart/{ProductId}/{NewQuantity}", async (IShoppingCartService cartService, IRepository<ShoppingCartItems> cartItemRepo, IRepository<ShoppingCart> cartRepo, IRepository<Product> productRepo, int productId, int newQuantity, HttpContext context) =>
             {
-                // include validation to see if newQuantity is allowed within the stock available.
-                // find a way to abstract out the operations using dbContext
-
                 if (newQuantity <= 0) return Results.BadRequest("New quantity must be a non-negative integer higher than 0.");
 
                 var userCart = await cartService.GetUserCartAsync(context);
@@ -58,6 +55,7 @@ namespace Project.Endpoints
                 if (userCartItems == null) return Results.NotFound($"No item with ProductId {productId} found in the user's cart.");
 
                 var product = await productRepo.GetByIdAsync(productId);
+                if (product.Stock - newQuantity < 0) return Results.BadRequest($"Product Id {productId} does not have enough stock. Available stock: {product.Stock}");
 
                 userCart.TotalQuantity = userCart.TotalQuantity - userCartItems.Quantity + newQuantity;
                 userCart.TotalPrice = userCart.TotalPrice - (userCartItems.Quantity * product.Price) + (newQuantity * product.Price);
