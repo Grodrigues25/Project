@@ -13,6 +13,8 @@ var builder = WebApplication.CreateBuilder();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+builder.Services.AddScoped(typeof(IShoppingCartService), typeof(ShoppingCartService));
+
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
@@ -78,6 +80,7 @@ app.RegisterUserEndpoints();
 app.RegisterProductEndpoints();
 app.RegisterAuthenticationEndpoints();
 app.RegisterOrderEndpoints();
+app.RegisterShoppingCartEndpoints();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project.Services;
 
@@ -11,9 +12,11 @@ using Project.Services;
 namespace Project.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250630155413_DataModelForShoppingCartUpdate")]
+    partial class DataModelForShoppingCartUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,12 +65,6 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.OrderItems", b =>
                 {
-                    b.Property<int>("EFKeyForOrderItems")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EFKeyForOrderItems"));
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -76,8 +73,6 @@ namespace Project.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.HasKey("EFKeyForOrderItems");
 
                     b.HasIndex("OrderId");
 
@@ -109,10 +104,15 @@ namespace Project.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
+                    b.Property<int?>("ShoppingCartCartId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("ShoppingCartCartId");
 
                     b.HasIndex("Name", "Description", "Category");
 
@@ -144,32 +144,6 @@ namespace Project.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("shoppingCarts");
-                });
-
-            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCartItems", b =>
-                {
-                    b.Property<int>("ArbitraryKeyForTracking")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArbitraryKeyForTracking"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArbitraryKeyForTracking");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("shoppingCartItems");
                 });
 
             modelBuilder.Entity("Project.Models.User", b =>
@@ -231,6 +205,13 @@ namespace Project.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Project.Models.Product", b =>
+                {
+                    b.HasOne("Project.Models.ShoppingCart.ShoppingCart", null)
+                        .WithMany("ProductList")
+                        .HasForeignKey("ShoppingCartCartId");
+                });
+
             modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCart", b =>
                 {
                     b.HasOne("Project.Models.User", null)
@@ -240,19 +221,9 @@ namespace Project.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCartItems", b =>
+            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCart", b =>
                 {
-                    b.HasOne("Project.Models.ShoppingCart.ShoppingCart", null)
-                        .WithMany()
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Project.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("ProductList");
                 });
 #pragma warning restore 612, 618
         }

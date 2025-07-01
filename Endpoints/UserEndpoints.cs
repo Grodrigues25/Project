@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Project.Models;
-using Project.Services.Repository;
 using Project.Services;
+using Project.Services.Repository;
+using System.Security.Claims;
 
 namespace Project.Endpoints
 {
@@ -28,12 +30,18 @@ namespace Project.Endpoints
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
 
+                // constraint so each standard user can only access their own data
+                var userClaims = request.HttpContext.User.Identity as ClaimsIdentity;
+                var userIdInToken = int.Parse(userClaims.FindFirst("id").Value);
+                var userRoleInToken = userClaims.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+                if (userRoleInToken != "admin" || userIdInToken != userId) return Results.Unauthorized();
+
                 if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
 
                 var user = await userRepo.GetByIdAsync(userId);
                 return user != null ? Results.Ok(user) : Results.NotFound($"There is no product with ID {userId}.");
 
-            }).RequireAuthorization("adminAccess");
+            });
 
             app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
             {
@@ -45,8 +53,11 @@ namespace Project.Endpoints
 
             });
 
-            app.MapPut("/Users/{UserId}", async (User user, int userId, IAuthenticationService auth, IRepository<User> userRepo) =>
+            app.MapPut("/Users/{UserId}", async (User user, int userId, IAuthenticationService auth, IRepository<User> userRepo, HttpRequest request) =>
             {
+                bool tokenIsValid = await auth.ValidateJwtToken(request);
+                if (!tokenIsValid) return Results.Unauthorized();
+
                 if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
                 if (user.UserId != userId) return Results.BadRequest("User ID in the body does not match the User ID in the URL.");
 
@@ -57,13 +68,13 @@ namespace Project.Endpoints
                 if (resultCode > 0) return Results.NoContent();
                 else return Results.NotFound($"There is no user with ID {userId}.");
 
-            }).RequireAuthorization("userAccess", "adminAccess");
+            }).RequireAuthorization("adminAccess");
 
             app.MapDelete("/Users/{UserId}", async (IRepository<User> userRepo, int userId, IAuthenticationService auth, HttpRequest request) =>
             {
-
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
+
                 if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
 
                 User user = await userRepo.GetByIdAsync(userId);

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project.Services;
 
@@ -11,9 +12,11 @@ using Project.Services;
 namespace Project.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250628161909_ShoppingCartTableCorrection")]
+    partial class ShoppingCartTableCorrection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,12 +65,6 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.OrderItems", b =>
                 {
-                    b.Property<int>("EFKeyForOrderItems")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EFKeyForOrderItems"));
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -76,8 +73,6 @@ namespace Project.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.HasKey("EFKeyForOrderItems");
 
                     b.HasIndex("OrderId");
 
@@ -96,15 +91,15 @@ namespace Project.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
@@ -114,48 +109,13 @@ namespace Project.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("Name", "Description", "Category");
-
                     b.ToTable("product");
                 });
 
-            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCart", b =>
+            modelBuilder.Entity("Project.Models.ShoppingCart", b =>
                 {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
-
-                    b.Property<float>("TotalPrice")
+                    b.Property<float>("Price")
                         .HasColumnType("real");
-
-                    b.Property<int>("TotalQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isCheckedOut")
-                        .HasColumnType("bit");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("shoppingCarts");
-                });
-
-            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCartItems", b =>
-                {
-                    b.Property<int>("ArbitraryKeyForTracking")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArbitraryKeyForTracking"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -163,13 +123,10 @@ namespace Project.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ArbitraryKeyForTracking");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("shoppingCartItems");
+                    b.ToTable("shoppingCarts");
                 });
 
             modelBuilder.Entity("Project.Models.User", b =>
@@ -221,30 +178,6 @@ namespace Project.Migrations
                     b.HasOne("Project.Models.Order", null)
                         .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Project.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCart", b =>
-                {
-                    b.HasOne("Project.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Project.Models.ShoppingCart.ShoppingCartItems", b =>
-                {
-                    b.HasOne("Project.Models.ShoppingCart.ShoppingCart", null)
-                        .WithMany()
-                        .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
