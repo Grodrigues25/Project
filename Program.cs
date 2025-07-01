@@ -6,6 +6,7 @@ using Project.Services.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Project.Services.Authentication;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -14,7 +15,6 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
 builder.Services.AddScoped(typeof(IShoppingCartService), typeof(ShoppingCartService));
-
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())

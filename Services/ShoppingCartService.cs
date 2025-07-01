@@ -3,6 +3,7 @@ using Project.Models;
 using Project.Models.ShoppingCart;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Project.Services.Authentication;
 
 namespace Project.Services
 {
@@ -11,19 +12,20 @@ namespace Project.Services
         private readonly UserDbContext _dbcontext;
         private readonly IRepository<ShoppingCart> _cartRepo;
         private readonly IRepository<ShoppingCartItems> _cartItemsRepo;
+        private readonly IAuthenticationService _authenticationService;
 
-        public ShoppingCartService(UserDbContext dbContext, IRepository<ShoppingCart> cartRepo, IRepository<ShoppingCartItems> cartItemsRepo)
+        public ShoppingCartService(UserDbContext dbContext, IRepository<ShoppingCart> cartRepo, IRepository<ShoppingCartItems> cartItemsRepo, IAuthenticationService auth)
         {
             _dbcontext = dbContext;
             _cartRepo = cartRepo;
             _cartItemsRepo = cartItemsRepo;
+            _authenticationService = auth;
         }
 
         public async Task<AddToCartModelResponseModel> AddToCart(Product product, int quantity, HttpContext context)
         {
             // Correct shopping cart logic to add total price and quantity
-            var userClaims = context.User.Identity as ClaimsIdentity;
-            var userId = int.Parse(userClaims.FindFirst("id").Value);
+            var userId = _authenticationService.GetUserIdFromJwtToken(context);
 
             var userCart = await _dbcontext.shoppingCarts
                 .Where(cart => cart.UserId == userId && !cart.isCheckedOut)
@@ -69,8 +71,7 @@ namespace Project.Services
 
         public async Task<ShoppingCart?> GetUserCartAsync(HttpContext context)
         {
-            var userClaims = context.User.Identity as ClaimsIdentity;
-            var userId = int.Parse(userClaims.FindFirst("id").Value);
+            var userId = _authenticationService.GetUserIdFromJwtToken(context);
 
             var userCart = await _dbcontext.shoppingCarts
                 .Where(cart => cart.UserId == userId && !cart.isCheckedOut)

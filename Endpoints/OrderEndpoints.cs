@@ -1,6 +1,6 @@
 ﻿using Project.Models;
 using Project.Services.Repository;
-using Project.Services;
+using Project.Services.Authentication;
 
 namespace Project.Endpoints
 {
@@ -37,11 +37,13 @@ namespace Project.Endpoints
             {
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
+
                 if (orderId < 0) return Results.BadRequest("Order ID needs to be a positive integer");
                 if (updatedOrder.OrderId != orderId) return Results.BadRequest("Order ID in the body does not match the Order ID in the URL.");
 
                 await orderRepo.UpdateAsync(updatedOrder);
                 return Results.NoContent();
+
             }).RequireAuthorization("adminAccess");
 
 
