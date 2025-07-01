@@ -23,19 +23,17 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
   - Assisted with working directly with GitHub for version control, including branching, pull requests, handling merge conflicts, and even had to do branch rebases to keep the branches clean and up to date.
   - Deepened knowledge on SQL querying, including the use of full-text search capabilities in SQL Server, and how to implement it in a .NET context.
   - Learn to use Entity Framework Core for data access, including migrations and model validation, and build a code first approach to database design.
-  - 
 
 - Throughout my development of this project, I've had to go back and forth many time to improve its structure and the way it was being build. You'll be able to see through the commits the adaptions I made through time:
     - The first decision was between using Minimal APIs or using Controllers. I've decided to use Minimal APIs for the simplicity.
     - The change from synchronous programming to asynchronous to improve performance and scalability.
     - The change from manual implementation of the logic of each endpoint to the use of the Repository patter to keep the code DRY.
-    - 
 
 ## Interesting Concepts Applied
 - **Dependency Injection**: The project uses [dependency injection](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) to manage service lifetimes and dependencies.
 - **Design Patterns**: Implements the [Repository Pattern](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#repository-pattern) for data access, promoting separation of concerns.
 - **Asynchronous Programming**: Implements [async/await](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/) for non-blocking I/O operations.
-- **Authentication and Authorization**: Uses [JWT Bearer Authentication](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-bearer) for secure API access.
+- **Authentication and Authorization**: Uses [JWT Bearer Authentication](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-bearer) for secure API access. Implements blacklisting of JWT tokens to prevent reuse after logout.
 - **Model Validation**: Utilizes [data annotations](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations) for input validation.
 - **SQL Full-Text Search**: Implements [full-text search](https://learn.microsoft.com/en-us/ef/core/querying/full-text-search) capabilities in the database for efficient querying.
 - **Configuration Management**: Uses [IConfiguration](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.configuration.iconfiguration) for flexible app settings.
@@ -43,7 +41,6 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
 ## Notable Libraries and Technologies
 - [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9)
 - [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/) for building web APIs.
-- [Swashbuckle.AspNetCore (Swagger)](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) for API documentation.
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) for data access.
 - [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity) for user management, password hashing, and JWT token operations.
 
@@ -87,8 +84,22 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
         - GET Endpoint to retrieve the top customers list since the start.
 
 - **/Migrations**: Database migrations for Entity Framework Core.
-- **/Models**: Defines data structures and validation. Data Annotations are used for model validation:
-- **/Services**: Business logic and data access. Includes repository pattern implementations.
+- **/Models**: Defines data structures and validation. Data Annotations are used for model validation. In general, it implements the schema of the SQL Tables in the database and some support models for responses in certain endpoints. Models for SQL DB tables are represented below in description of SQL DB tables. Placing below description of the other support models for the APIs:
+    - **Authentication**:
+        - LoginRequestModel: Implements what are the mandatory parameters required in the LoginRequest.
+        - LoginResponseModel: Implements what are the mandatory parameters sent through the endpoint in the event of a successful LoginRequest.
+    - **Reports**:
+        - ReportTopCustomersModel: Implements the response sent through the endpoint to the GET request to get Top Customers list;
+        - ReportTopProdcutsModel: Implements the response sent through the endpoint to the GET request to get the Best Selling Products list;
+    - **ShoppingCart**:
+        - AddToCartModelResponseModel: Implements the response sent back to user when using POST request to add an item to the cart;
+
+ - **/Services**: Business logic and data access. Whenever applicable, repository pattern is used to abstract the data access logic from the endpoints:
+    - **AuthenticationService**: Handles user authentication and JWT token management and is used to abstract the authentication logic from the endpoints. Also used to support authorization logic in the endpoints.
+    - **Database**: Contains the database context and configuration for Entity Framework Core, along with the table foreign keys and relationships.
+    - **Reports**: Contains the service logic for querying the SQLDatabase tables to generate the sales data for the report endpoints.
+    - **ShoppingCartService**: Contains the service logic for managing the shopping cart, including adding, updating, and removing items.
+    - **Repository**: Used to implement generic AddAsync, DeleteAsync, GetAsync, GetByIdAsync, UpdateAsync using Repository pattern for all kinds of operations for the tables involved in this project with Entity Framework. It is implemented as a template to be adaptable to the class provided.
 - **/Properties**: Project metadata and settings.
 
 ## SQL Database Tables
@@ -100,7 +111,60 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
 - **ShoppingCart**: Manages user shopping carts.
 - **ShoppingCartItems**: Link user's shopping carts to the items in them.
 
-// INSERT IMAGE OF THE CONNECTIONS BETWEEN THE TABLES
+![SQL DBs schema and relationships](images/SQLdbSchemaAndRelationships.png)
+
+Entity Framework Implementation of Foreign Key Constraints
+```c#
+        #region Required
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations
+
+            modelBuilder.Entity<User>()
+                .HasIndex(user => user.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasMany<Order>()
+                .WithOne()
+                .HasForeignKey(order => order.UserId)
+                .IsRequired();
+
+            // Order Items Constraints
+            modelBuilder.Entity<Order>()
+                .HasMany<OrderItems>()
+                .WithOne()
+                .HasForeignKey(orderItem => orderItem.OrderId)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .HasMany<OrderItems>()
+                .WithOne()
+                .HasForeignKey(orderItem => orderItem.ProductId)
+                .IsRequired();
+
+            // Shopping Cart Constraints
+            modelBuilder.Entity<User>()
+                .HasMany<ShoppingCart>()
+                .WithOne()
+                .HasForeignKey(ShoppingCartItem => ShoppingCartItem.UserId)
+                .IsRequired();
+
+            // Shopping Cart Items Constraints
+            modelBuilder.Entity<ShoppingCart>()
+                .HasMany<ShoppingCartItems>()
+                .WithOne()
+                .HasForeignKey(cartItem => cartItem.CartId)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .HasMany<ShoppingCartItems>()
+                .WithOne()
+                .HasForeignKey(cartItem => cartItem.ProductId)
+                .IsRequired();
+        }
+        #endregion
+```
 
 # Implementation Details
 ## SQL Full-Text Search
@@ -117,6 +181,7 @@ CREATE FULLTEXT INDEX ON product(Name, Description, Category)
   KEY INDEX PK_Product ON ProductSearch 
   WITH STOPLIST = OFF, CHANGE_TRACKING AUTO;
 ```
+
 
 ---
 

@@ -1,6 +1,6 @@
 ﻿using Project.Models.Users;
 
-namespace Project.Models.Security
+namespace Project.Services.Security
 {
     public interface ISecurityService
     {

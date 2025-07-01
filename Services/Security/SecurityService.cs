@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Project.Models.Users;
 
-namespace Project.Models.Security
+namespace Project.Services.Security
 {
     public class SecurityService : ISecurityService
     {

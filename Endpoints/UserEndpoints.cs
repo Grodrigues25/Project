@@ -1,7 +1,7 @@
-﻿using Project.Models.Security;
-using Project.Models.Users;
+﻿using Project.Models.Users;
 using Project.Services.Authentication;
 using Project.Services.Repository;
+using Project.Services.Security;
 
 namespace Project.Endpoints
 {
