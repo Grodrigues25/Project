@@ -15,16 +15,15 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
   - Adding unit and integration tests to ensure code quality.
   - Implementing advanced error handling and logging mechanisms.
   - Implementing caching strategies to improve performance.
-  - Implementing the ability to extract metrics and performance data regarding the "sales" processed by the API of this Order Management Platform.
 
 ## What I Learned
 - Learning Points:
   - Learned from scratch how to build a RESTful API using .NET 9. This is my first project using .NET 9 and C#.
   - Applied for the first time concepts like dependency injection, asynchronous programming, and JWT authentication in a .NET context. More below about the main concepts applied.
   - Assisted with working directly with GitHub for version control, including branching, pull requests, handling merge conflicts, and even had to do branch rebases to keep the branches clean and up to date.
-
-- Concepts that became clearer:
-    - 
+  - Deepened knowledge on SQL querying, including the use of full-text search capabilities in SQL Server, and how to implement it in a .NET context.
+  - Learn to use Entity Framework Core for data access, including migrations and model validation, and build a code first approach to database design.
+  - 
 
 - Throughout my development of this project, I've had to go back and forth many time to improve its structure and the way it was being build. You'll be able to see through the commits the adaptions I made through time:
     - The first decision was between using Minimal APIs or using Controllers. I've decided to use Minimal APIs for the simplicity.
@@ -80,6 +79,13 @@ This project is a .NET 9 web API build for learning purposes as part of Dev Acad
     - Authentication Endpoints:
         - POST Endpoint for user login, returning a JWT token.
         - POST Endpoint for user logout, invalidating the JWT token and placing it in a blacklist table.
+    - Sales Reports:
+        - GET Endpoint to retrieve sales reports for a given month;
+        - GET Endpoint to retrieve sales reports for a given year;
+        - GET Endpoint to retrieve the total sales since the start;
+        - GET Endpoint to retrieve the most sold product since the start;
+        - GET Endpoint to retrieve the top customers list since the start.
+
 - **/Migrations**: Database migrations for Entity Framework Core.
 - **/Models**: Defines data structures and validation. Data Annotations are used for model validation:
 - **/Services**: Business logic and data access. Includes repository pattern implementations.

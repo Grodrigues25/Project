@@ -9,6 +9,7 @@ using Project.Services.Authentication;
 using Project.Services.ShoppingCartService;
 using Project.Services.Database;
 using Project.Models.Security;
+using Project.Services.Reports;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -18,6 +19,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
 builder.Services.AddScoped(typeof(IShoppingCartService), typeof(ShoppingCartService));
 builder.Services.AddScoped(typeof(ISecurityService), typeof(SecurityService));
+builder.Services.AddScoped(typeof(IReportingService), typeof(ReportingService));
 
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
@@ -84,6 +86,7 @@ app.RegisterProductEndpoints();
 app.RegisterAuthenticationEndpoints();
 app.RegisterOrderEndpoints();
 app.RegisterShoppingCartEndpoints();
+app.RegisterReportEndpoints();
 
 app.UseAuthentication();
 app.UseAuthorization();
