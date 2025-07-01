@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Project.Services.Authentication;
-using Project.Services.ShoppingCart;
+using Project.Services.ShoppingCartService;
 using Project.Services.Database;
 
 

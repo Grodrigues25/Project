@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
+using Project.Models.Security;
 using Project.Models.Users;
 using Project.Services.Authentication;
 using Project.Services.Repository;
@@ -42,17 +43,15 @@ namespace Project.Endpoints
 
             });
 
-            app.MapPost("/Users", async (IRepository<User> userRepo, User user) =>
+            app.MapPost("/Users", async (IRepository<User> userRepo, ISecurityService security, User user) =>
             {
-                var PasswordHasher = new PasswordHasher<User>();
-                user.Password = PasswordHasher.HashPassword(user, user.Password);
+                user = security.UserPasswordHashing(user);
                 await userRepo.AddAsync(user);
-
                 return Results.Created($"/Users/{user.UserId}", user);
 
             });
 
-            app.MapPut("/Users/{UserId}", async (User user, int userId, IAuthenticationService auth, IRepository<User> userRepo, HttpRequest request) =>
+            app.MapPut("/Users/{UserId}", async (User user, int userId, IAuthenticationService auth, ISecurityService security, IRepository<User> userRepo, HttpRequest request) =>
             {
                 bool tokenIsValid = await auth.ValidateJwtToken(request);
                 if (!tokenIsValid) return Results.Unauthorized();
@@ -60,8 +59,7 @@ namespace Project.Endpoints
                 if (userId < 0) return Results.BadRequest("User ID need to be a positive integer");
                 if (user.UserId != userId) return Results.BadRequest("User ID in the body does not match the User ID in the URL.");
 
-                var PasswordHasher = new PasswordHasher<User>();
-                user.Password = PasswordHasher.HashPassword(user, user.Password);
+                user = security.UserPasswordHashing(user);  
 
                 int resultCode = await userRepo.UpdateAsync(user);
                 if (resultCode > 0) return Results.NoContent();

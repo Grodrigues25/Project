@@ -1,7 +1,7 @@
 ﻿using Project.Models.Products;
 using Project.Models.ShoppingCart;
 
-namespace Project.Services.ShoppingCart
+namespace Project.Services.ShoppingCartService
 {
     public interface IShoppingCartService
     {

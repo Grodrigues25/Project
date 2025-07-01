@@ -6,7 +6,7 @@ using Project.Services.Authentication;
 using Project.Services.Database;
 using Project.Models.Products;
 
-namespace Project.Services.ShoppingCart
+namespace Project.Services.ShoppingCartService
 {
     public class ShoppingCartService : IShoppingCartService
     {

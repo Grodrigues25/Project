@@ -4,7 +4,7 @@ using Project.Models.Products;
 using Project.Models.ShoppingCart;
 using Project.Services.Database;
 using Project.Services.Repository;
-using Project.Services.ShoppingCart;
+using Project.Services.ShoppingCartService;
 
 namespace Project.Endpoints
 {
